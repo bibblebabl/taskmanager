@@ -7,7 +7,7 @@
     container.insertAdjacentHTML(`beforeend`, component);
   };
 
-  const menuComponent = () => {
+  const getMenuComponent = () => {
     return `
     <section class="control__btn-wrap">
       <input
@@ -40,7 +40,7 @@
     `;
   };
 
-  const searchComponent = () => {
+  const getSearchComponent = () => {
     return `
     <section class="main__search search container">
       <input
@@ -54,7 +54,7 @@
     `;
   };
 
-  const mainFiltersComponent = () => {
+  const getMainFiltersComponent = () => {
     return `
     <section class="main__filter filter container">
       <input
@@ -127,7 +127,7 @@
     `;
   };
 
-  const boardFiltersComponent = () => {
+  const getBoardFiltersComponent = () => {
     return `
     <div class="board__filter-list">
       <a href="#" class="board__filter">SORT BY DEFAULT</a>
@@ -137,7 +137,7 @@
     `;
   };
 
-  const taskCardComponent = () => {
+  const getTaskCardComponent = () => {
     return `
     <article class="card card--black">
       <div class="card__form">
@@ -207,7 +207,7 @@
     `;
   };
 
-  const editCardComponent = () => {
+  const getEditCardComponent = () => {
     return `
     <article class="card card--edit card--black">
       <form class="card__form" method="get">
@@ -433,7 +433,7 @@
     `;
   };
 
-  const loadMoreButtonComponent = () => {
+  const getLoadMoreButtonComponent = () => {
     return `
       <button class="load-more" type="button">load more</button>
     `;
@@ -441,26 +441,25 @@
 
   const mainContainer = document.querySelector(`.main`);
   const controlContainer = document.querySelector(`.main__control`);
-
-  renderComponent(controlContainer, menuComponent());
-  renderComponent(mainContainer, searchComponent());
-  renderComponent(mainContainer, mainFiltersComponent());
-
   const boardContainer = document.createElement(`section`);
   const boardTasksContainer = document.createElement(`div`);
+
   boardContainer.classList.add(`board`, `container`);
   boardTasksContainer.classList.add(`board__tasks`);
 
-  renderComponent(boardContainer, boardFiltersComponent());
-  renderComponent(boardTasksContainer, editCardComponent());
+  renderComponent(controlContainer, getMenuComponent());
+  renderComponent(mainContainer, getSearchComponent());
+  renderComponent(mainContainer, getMainFiltersComponent());
+  renderComponent(boardContainer, getBoardFiltersComponent());
+  renderComponent(boardTasksContainer, getEditCardComponent());
 
   for (let index = 0; index < CARDS_COUNT; index++) {
-    renderComponent(boardTasksContainer, taskCardComponent());
+    renderComponent(boardTasksContainer, getTaskCardComponent());
   }
 
   boardContainer.appendChild(boardTasksContainer);
 
-  renderComponent(boardContainer, loadMoreButtonComponent());
+  renderComponent(boardContainer, getLoadMoreButtonComponent());
 
   mainContainer.appendChild(boardContainer);
 })();
