@@ -127,6 +127,7 @@
     `;
   };
 
+
   const getBoardFiltersComponent = () => {
     return `
     <div class="board__filter-list">
@@ -206,6 +207,7 @@
     </article>
     `;
   };
+
 
   const getEditCardComponent = () => {
     return `
@@ -439,27 +441,35 @@
     `;
   };
 
+  const getTasksComponents = (cardsCount) => {
+    const cardsArray = new Array(cardsCount).fill(cardsCount);
+    let cardsComponents = ``;
+
+    cardsArray.forEach((card) => {
+      cardsComponents = cardsComponents + getTaskCardComponent(card);
+    });
+
+    return cardsComponents;
+  };
+
+  const getBoard = () => {
+    return `
+    <section class="board container">
+      ${getBoardFiltersComponent()}
+      <div class="board__tasks">
+        ${getEditCardComponent()}
+        ${getTasksComponents(CARDS_COUNT)}
+      </div>
+      ${getLoadMoreButtonComponent()}
+    </section>
+    `;
+  };
+
   const mainContainer = document.querySelector(`.main`);
   const controlContainer = document.querySelector(`.main__control`);
-  const boardContainer = document.createElement(`section`);
-  const boardTasksContainer = document.createElement(`div`);
-
-  boardContainer.classList.add(`board`, `container`);
-  boardTasksContainer.classList.add(`board__tasks`);
 
   renderComponent(controlContainer, getMenuComponent());
   renderComponent(mainContainer, getSearchComponent());
   renderComponent(mainContainer, getMainFiltersComponent());
-  renderComponent(boardContainer, getBoardFiltersComponent());
-  renderComponent(boardTasksContainer, getEditCardComponent());
-
-  for (let index = 0; index < CARDS_COUNT; index++) {
-    renderComponent(boardTasksContainer, getTaskCardComponent());
-  }
-
-  boardContainer.appendChild(boardTasksContainer);
-
-  renderComponent(boardContainer, getLoadMoreButtonComponent());
-
-  mainContainer.appendChild(boardContainer);
+  renderComponent(mainContainer, getBoard());
 })();
