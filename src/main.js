@@ -1,14 +1,11 @@
-'use strict';
+const CARDS_COUNT = 3;
 
-(function () {
-  const CARDS_COUNT = 3;
+const renderComponent = (container, component) => {
+  container.insertAdjacentHTML(`beforeend`, component);
+};
 
-  const renderComponent = (container, component) => {
-    container.insertAdjacentHTML(`beforeend`, component);
-  };
-
-  const getMenuComponent = () => {
-    return `
+const getMenuComponent = () => {
+  return `
     <section class="control__btn-wrap">
       <input
         type="radio"
@@ -38,10 +35,10 @@
       >
     </section>
     `;
-  };
+};
 
-  const getSearchComponent = () => {
-    return `
+const getSearchComponent = () => {
+  return `
     <section class="main__search search container">
       <input
         type="text"
@@ -52,10 +49,10 @@
       <label class="visually-hidden" for="search__input">Search</label>
     </section>
     `;
-  };
+};
 
-  const getMainFiltersComponent = () => {
-    return `
+const getMainFiltersComponent = () => {
+  return `
     <section class="main__filter filter container">
       <input
         type="radio"
@@ -125,21 +122,21 @@
       >
     </section>
     `;
-  };
+};
 
 
-  const getBoardFiltersComponent = () => {
-    return `
+const getBoardFiltersComponent = () => {
+  return `
     <div class="board__filter-list">
       <a href="#" class="board__filter">SORT BY DEFAULT</a>
       <a href="#" class="board__filter">SORT BY DATE up</a>
       <a href="#" class="board__filter">SORT BY DATE down</a>
     </div>
     `;
-  };
+};
 
-  const getTaskCardComponent = () => {
-    return `
+const getTaskCardComponent = () => {
+  return `
     <article class="card card--black">
       <div class="card__form">
         <div class="card__inner">
@@ -206,11 +203,11 @@
       </div>
     </article>
     `;
-  };
+};
 
 
-  const getEditCardComponent = () => {
-    return `
+const getEditCardComponent = () => {
+  return `
     <article class="card card--edit card--black">
       <form class="card__form" method="get">
         <div class="card__inner">
@@ -433,27 +430,27 @@
       </form>
     </article>
     `;
-  };
+};
 
-  const getLoadMoreButtonComponent = () => {
-    return `
+const getLoadMoreButtonComponent = () => {
+  return `
       <button class="load-more" type="button">load more</button>
     `;
-  };
+};
 
-  const getTasksComponents = (cardsCount) => {
-    const cardsArray = new Array(cardsCount).fill(cardsCount);
-    let cardsComponents = ``;
+const getTasksComponents = (cardsCount) => {
+  const cardsArray = new Array(cardsCount).fill(cardsCount);
+  let cardsComponents = ``;
 
-    cardsArray.forEach((card) => {
-      cardsComponents = cardsComponents + getTaskCardComponent(card);
-    });
+  cardsArray.forEach((card) => {
+    cardsComponents = cardsComponents + getTaskCardComponent(card);
+  });
 
-    return cardsComponents;
-  };
+  return cardsComponents;
+};
 
-  const getBoard = () => {
-    return `
+const getBoard = () => {
+  return `
     <section class="board container">
       ${getBoardFiltersComponent()}
       <div class="board__tasks">
@@ -463,13 +460,12 @@
       ${getLoadMoreButtonComponent()}
     </section>
     `;
-  };
+};
 
-  const mainContainer = document.querySelector(`.main`);
-  const controlContainer = document.querySelector(`.main__control`);
+const mainContainer = document.querySelector(`.main`);
+const controlContainer = document.querySelector(`.main__control`);
 
-  renderComponent(controlContainer, getMenuComponent());
-  renderComponent(mainContainer, getSearchComponent());
-  renderComponent(mainContainer, getMainFiltersComponent());
-  renderComponent(mainContainer, getBoard());
-})();
+renderComponent(controlContainer, getMenuComponent());
+renderComponent(mainContainer, getSearchComponent());
+renderComponent(mainContainer, getMainFiltersComponent());
+renderComponent(mainContainer, getBoard());
