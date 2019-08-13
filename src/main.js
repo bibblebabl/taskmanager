@@ -1,5 +1,6 @@
 const CARDS_COUNT = 3;
 
+import {getRandomTask} from './data';
 import {getMenuComponent} from './components/menu';
 import {getSearchComponent} from './components/search';
 import {getMainFiltersComponent} from './components/main-filters';
@@ -15,4 +16,4 @@ const controlContainer = document.querySelector(`.main__control`);
 renderComponent(controlContainer, getMenuComponent());
 renderComponent(mainContainer, getSearchComponent());
 renderComponent(mainContainer, getMainFiltersComponent());
-renderComponent(mainContainer, getBoard(CARDS_COUNT));
+renderComponent(mainContainer, getBoard(CARDS_COUNT, getRandomTask));
