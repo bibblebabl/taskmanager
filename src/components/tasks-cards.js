@@ -1,10 +1,7 @@
 import {getTaskCardComponent} from './task-card';
 
-const getTasksComponents = (cardsCount, getRandomTask) => {
-  const cardsArray = new Array(cardsCount).fill(cardsCount).map(() => getRandomTask());
-  const cardsComponents = cardsArray.map((card) => getTaskCardComponent(card)).join(``);
-
-  return cardsComponents;
+const getTasksComponents = (cardsList) => {
+  return cardsList.map((card) => getTaskCardComponent(card)).join(``);
 };
 
 export {

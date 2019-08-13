@@ -1,3 +1,5 @@
+import {getRandomBoolean, getFiltersCount} from './utils';
+
 const getRandomTask = () => ({
   description: [
     `Изучить теорию`,
@@ -8,7 +10,7 @@ const getRandomTask = () => ({
   repeatingDays: {
     Mo: false,
     Tu: false,
-    We: Boolean(Math.round(Math.random())),
+    We: getRandomBoolean(),
     Th: false,
     Fr: false,
     Sa: false,
@@ -28,11 +30,70 @@ const getRandomTask = () => ({
     `green`,
     `pink`
   ][Math.floor(Math.random() * 5)],
-  isFavorite: Boolean(Math.round(Math.random())),
-  isArchive: Boolean(Math.round(Math.random())),
+  isFavorite: getRandomBoolean(),
+  isArchive: getRandomBoolean(),
 });
+
+const getCardsList = (cardsCount) => [...Array(cardsCount)].map(() => getRandomTask());
+
+const getMainFiltersList = (cardsList) => {
+  const filterCount = getFiltersCount(cardsList);
+
+  return [
+    {
+      id: `all`,
+      label: `All`,
+      count: filterCount.all,
+      checked: true,
+      disabled: false
+    },
+    {
+      id: `overdue`,
+      label: `Overdue`,
+      count: filterCount.overdue,
+      checked: false,
+      disabled: true
+    },
+    {
+      id: `today`,
+      label: `Today`,
+      count: filterCount.today,
+      checked: false,
+      disabled: true
+    },
+    {
+      id: `favorites`,
+      label: `Favorites`,
+      count: filterCount.favorites,
+      checked: false,
+      disabled: false
+    },
+    {
+      id: `repeating`,
+      label: `Repeating`,
+      count: filterCount.repeating,
+      checked: false,
+      disabled: false
+    },
+    {
+      id: `tags`,
+      label: `Tags`,
+      count: filterCount.tags,
+      checked: false,
+      disabled: false
+    },
+    {
+      id: `archive`,
+      label: `Archive`,
+      count: filterCount.archive,
+      checked: false,
+      disabled: false
+    }
+  ];
+};
 
 
 export {
-  getRandomTask
+  getCardsList,
+  getMainFiltersList
 };

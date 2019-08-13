@@ -3,13 +3,13 @@ import {getTasksComponents} from './tasks-cards';
 import {getEditCardComponent} from './edit-task-card';
 import {getLoadMoreButtonComponent} from './load-more-button';
 
-const getBoard = (cardsCount, getRandomTask) => {
+const getBoard = (cardsList) => {
   return `
     <section class="board container">
       ${getBoardFiltersComponent()}
       <div class="board__tasks">
         ${getEditCardComponent()}
-        ${getTasksComponents(cardsCount, getRandomTask)}
+        ${getTasksComponents(cardsList)}
       </div>
       ${getLoadMoreButtonComponent()}
     </section>
