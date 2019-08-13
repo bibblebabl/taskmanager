@@ -1,11 +1,11 @@
-import {getRandomBoolean, getFiltersCount} from './utils';
+import {getRandomBoolean, getRandomNumber, getFiltersCount} from './utils';
 
 const getRandomTask = () => ({
   description: [
     `Изучить теорию`,
     `Сделать домашку`,
     `Пройти интенсив на соточку`
-  ][Math.floor(Math.random() * 3)],
+  ][getRandomNumber(3)],
   dueDate: Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000, // в рамках неделю на неделю вперед
   repeatingDays: {
     Mo: false,
@@ -29,7 +29,7 @@ const getRandomTask = () => ({
     `blue`,
     `green`,
     `pink`
-  ][Math.floor(Math.random() * 5)],
+  ][getRandomNumber(5)],
   isFavorite: getRandomBoolean(),
   isArchive: getRandomBoolean(),
 });
