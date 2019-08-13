@@ -1,5 +1,7 @@
 export const getRandomBoolean = () => Boolean(Math.round(Math.random()));
 
+export const getRandomNumber = (maxNumber) => Math.floor(Math.random() * maxNumber);
+
 export const getFiltersCount = (list) => {
   const currentDate = new Date();
 
@@ -21,7 +23,8 @@ export const getFiltersCount = (list) => {
     if (card.dueDate < currentDate) {
       filterCount.overdue += 1;
     }
-    if (card.dueDate.toDateString() === currentDate.toDateString()) {
+
+    if (new Date(card.dueDate).toDateString() === currentDate.toDateString()) {
       filterCount.today += 1;
     }
 
@@ -33,7 +36,7 @@ export const getFiltersCount = (list) => {
       filterCount.archive += 1;
     }
 
-    const isRepeating = Array.from(card.repeatingDays).some((day) => card.repeatingDays[day]);
+    const isRepeating = Object.keys(card.repeatingDays).some((day) => card.repeatingDays[day]);
 
     if (isRepeating) {
       filterCount.repeating += 1;

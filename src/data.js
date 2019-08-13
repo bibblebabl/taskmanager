@@ -6,7 +6,7 @@ const getRandomTask = () => ({
     `Сделать домашку`,
     `Пройти интенсив на соточку`
   ][Math.floor(Math.random() * 3)],
-  dueDate: new Date(), // уточнить на видео 2:42:18 что за нюанс с date.now
+  dueDate: Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000, // в рамках неделю на неделю вперед
   repeatingDays: {
     Mo: false,
     Tu: false,
