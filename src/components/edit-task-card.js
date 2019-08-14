@@ -9,7 +9,7 @@ const getEditCardComponent = ({
   isFavorite,
   isArchive
 }) => {
-  const isRepeating = Object.keys(repeatingDays).some((day) => repeatingDays[day]);
+  const isRepeating = Object.values(repeatingDays).some((day) => day);
   return `
     <article class="card card--edit card--${color}">
       <form class="card__form" method="get">
@@ -68,7 +68,7 @@ const getEditCardComponent = ({
 
                 <fieldset class="card__repeat-days">
                   <div class="card__repeat-days-inner">
-                  ${Object.keys(repeatingDays).map((day) => getRepeatingDaysCheckbox(day, repeatingDays[day])).join(``)}
+                  ${Object.entries(repeatingDays).map(([day, value]) => getRepeatingDaysCheckbox(day, value)).join(``)}
                 </fieldset>
               </div>
 

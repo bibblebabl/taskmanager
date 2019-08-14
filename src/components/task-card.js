@@ -7,7 +7,7 @@ const getTaskCardComponent = ({
   isFavorite,
   isArchive
 }) => {
-  const isRepeating = Object.keys(repeatingDays).some((day) => repeatingDays[day]);
+  const isRepeating = Object.values(repeatingDays).some((day) => day);
   return `
     <article class="card card--${color} ${isRepeating ? `card--repeat` : ``}">
       <div class="card__form">
