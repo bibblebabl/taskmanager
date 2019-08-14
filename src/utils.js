@@ -13,32 +13,12 @@ export const getFiltersCount = (list) => {
 
   const filters = list.reduce((total, card) => {
     total.all += 1;
-
-    if (card.dueDate < currentDate) {
-      total.overdue += 1;
-    }
-
-    if (new Date(card.dueDate).toDateString() === currentDate.toDateString()) {
-      total.today += 1;
-    }
-
-    if (card.isFavorite) {
-      total.favorites += 1;
-    }
-
-    if (card.isArchive) {
-      total.archive += 1;
-    }
-
-    const isRepeating = Object.values(card.repeatingDays).some((day) => day);
-
-    if (isRepeating) {
-      total.repeating += 1;
-    }
-
-    if (card.tags.size) {
-      total.tags += 1;
-    }
+    total.overdue += +(card.dueDate < currentDate);
+    total.today += +(new Date(card.dueDate).toDateString() === currentDate.toDateString());
+    total.favorites += +(card.isFavorite);
+    total.archive += +(card.isArchive);
+    total.repeating += +(Object.values(card.repeatingDays).some((day) => day));
+    total.tags += +(card.tags.size);
 
     return total;
   }, {
