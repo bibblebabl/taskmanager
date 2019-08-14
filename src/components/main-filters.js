@@ -1,6 +1,8 @@
 const getMainFilterElement = ({
   title,
-  count
+  count,
+  checked,
+  disabled
 }) => {
   return `
     <input
@@ -8,6 +10,8 @@ const getMainFilterElement = ({
       id="filter__${title}"
       class="filter__input visually-hidden"
       name="filter"
+      ${checked ? `checked` : ``}
+      ${disabled ? `disabled` : ``}
     />
     <label for="filter__${title}" class="filter__label">
       ${title} <span class="filter__${title}-count">${count}</span></label
