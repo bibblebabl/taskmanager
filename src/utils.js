@@ -1,11 +1,47 @@
 export const getRandomBoolean = () => Boolean(Math.round(Math.random()));
 
-export const getRandomNumber = (maxNumber) => Math.floor(Math.random() * maxNumber);
+export const getRandomNumber = (maxNumber) => Math.round(Math.random() * maxNumber);
+
+export const getRandomArrayElement = (array) => array[getRandomNumber(array.length - 1)];
+
+export const getRandomArrayElements = (array, length) => {
+  return array.slice(0, getRandomNumber(length || array.length - 1));
+};
 
 export const getFiltersCount = (list) => {
   const currentDate = new Date();
 
-  const filterCount = {
+  const filters = list.reduce((total, card) => {
+    total.all += 1;
+
+    if (card.dueDate < currentDate) {
+      total.overdue += 1;
+    }
+
+    if (new Date(card.dueDate).toDateString() === currentDate.toDateString()) {
+      total.today += 1;
+    }
+
+    if (card.isFavorite) {
+      total.favorites += 1;
+    }
+
+    if (card.isArchive) {
+      total.archive += 1;
+    }
+
+    const isRepeating = Object.values(card.repeatingDays).some((day) => day);
+
+    if (isRepeating) {
+      total.repeating += 1;
+    }
+
+    if (card.tags.size) {
+      total.tags += 1;
+    }
+
+    return total;
+  }, {
     all: 0,
     overdue: 0,
     today: 0,
@@ -13,41 +49,7 @@ export const getFiltersCount = (list) => {
     repeating: 0,
     tags: 0,
     archive: 0
-  };
-
-  let allTagsSet = new Set([]);
-
-  list.forEach((card) => {
-    filterCount.all += 1;
-
-    if (card.dueDate < currentDate) {
-      filterCount.overdue += 1;
-    }
-
-    if (new Date(card.dueDate).toDateString() === currentDate.toDateString()) {
-      filterCount.today += 1;
-    }
-
-    if (card.isFavorite) {
-      filterCount.favorites += 1;
-    }
-
-    if (card.isArchive) {
-      filterCount.archive += 1;
-    }
-
-    const isRepeating = Object.keys(card.repeatingDays).some((day) => card.repeatingDays[day]);
-
-    if (isRepeating) {
-      filterCount.repeating += 1;
-    }
-
-    if (card.tags.size) {
-      allTagsSet = new Set([...allTagsSet, ...card.tags]);
-    }
   });
 
-  filterCount.tags = allTagsSet.size;
-
-  return filterCount;
+  return filters;
 };

@@ -1,12 +1,14 @@
-import {getRandomBoolean, getRandomNumber, getFiltersCount} from './utils';
+import {getRandomBoolean, getRandomNumber, getRandomArrayElement, getRandomArrayElements, getFiltersCount} from './utils';
+
+const allColors = [`black`, `yellow`, `blue`, `green`, `pink`];
 
 const getRandomTask = () => ({
-  description: [
+  description: getRandomArrayElement([
     `Изучить теорию`,
     `Сделать домашку`,
     `Пройти интенсив на соточку`
-  ][getRandomNumber(3)],
-  dueDate: Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000, // в рамках неделю на неделю вперед
+  ]),
+  dueDate: Date.now() + 1 + getRandomNumber(7) * 24 * 60 * 60 * 1000, // в рамках неделю на неделю вперед
   repeatingDays: {
     Mo: false,
     Tu: false,
@@ -16,20 +18,14 @@ const getRandomTask = () => ({
     Sa: false,
     Su: false
   },
-  tags: new Set([
+  tags: new Set(getRandomArrayElements([
     `homework`,
     `theory`,
     `practice`,
     `intensive`,
     `keks`
-  ]),
-  color: [
-    `black`,
-    `yellow`,
-    `blue`,
-    `green`,
-    `pink`
-  ][getRandomNumber(5)],
+  ], 3)),
+  color: getRandomArrayElement(allColors),
   isFavorite: getRandomBoolean(),
   isArchive: getRandomBoolean(),
 });
@@ -41,49 +37,42 @@ const getMainFiltersList = (cardsList) => {
 
   return [
     {
-      id: `all`,
       label: `All`,
       count: filterCount.all,
       checked: true,
       disabled: false
     },
     {
-      id: `overdue`,
       label: `Overdue`,
       count: filterCount.overdue,
       checked: false,
       disabled: true
     },
     {
-      id: `today`,
       label: `Today`,
       count: filterCount.today,
       checked: false,
       disabled: true
     },
     {
-      id: `favorites`,
       label: `Favorites`,
       count: filterCount.favorites,
       checked: false,
       disabled: false
     },
     {
-      id: `repeating`,
       label: `Repeating`,
       count: filterCount.repeating,
       checked: false,
       disabled: false
     },
     {
-      id: `tags`,
       label: `Tags`,
       count: filterCount.tags,
       checked: false,
       disabled: false
     },
     {
-      id: `archive`,
       label: `Archive`,
       count: filterCount.archive,
       checked: false,
@@ -95,5 +84,6 @@ const getMainFiltersList = (cardsList) => {
 
 export {
   getCardsList,
-  getMainFiltersList
+  getMainFiltersList,
+  allColors
 };

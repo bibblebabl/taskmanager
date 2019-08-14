@@ -1,5 +1,4 @@
 const getMainFilterElement = ({
-  id,
   label,
   count,
   checked,
@@ -8,14 +7,14 @@ const getMainFilterElement = ({
   return `
     <input
       type="radio"
-      id="filter__${id}"
+      id="filter__${label.toLowerCase()}"
       class="filter__input visually-hidden"
       name="filter"
       ${checked ? `checked` : ``}
       ${disabled ? `disabled` : ``}
     />
-    <label for="filter__${id}" class="filter__label">
-      ${label} <span class="filter__${id}-count">${count}</span></label
+    <label for="filter__${label.toLowerCase()}" class="filter__label">
+      ${label} <span class="filter__${label.toLowerCase()}-count">${count}</span></label
     >
   `;
 };
