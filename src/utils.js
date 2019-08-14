@@ -8,7 +8,7 @@ export const getRandomArrayElements = (array, length) => {
   return array.slice(0, getRandomNumber(length || array.length - 1));
 };
 
-export const getFiltersCount = (list) => {
+export const getFiltersCount = (list, mainFilters) => {
   const currentDate = new Date();
 
   const filters = list.reduce((total, card) => {
@@ -21,15 +21,7 @@ export const getFiltersCount = (list) => {
     total.tags += +(card.tags.size);
 
     return total;
-  }, {
-    all: 0,
-    overdue: 0,
-    today: 0,
-    favorites: 0,
-    repeating: 0,
-    tags: 0,
-    archive: 0
-  });
+  }, mainFilters);
 
   return filters;
 };

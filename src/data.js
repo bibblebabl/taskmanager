@@ -1,4 +1,10 @@
-import {getRandomBoolean, getRandomNumber, getRandomArrayElement, getRandomArrayElements, getFiltersCount} from './utils';
+import {
+  getRandomBoolean,
+  getRandomNumber,
+  getRandomArrayElement,
+  getRandomArrayElements,
+  getFiltersCount
+} from './utils';
 
 const allColors = [`black`, `yellow`, `blue`, `green`, `pink`];
 
@@ -32,55 +38,27 @@ const getRandomTask = () => ({
 
 const getCardsList = (cardsCount) => [...Array(cardsCount)].map(() => getRandomTask());
 
-const getMainFiltersList = (cardsList) => {
-  const filterCount = getFiltersCount(cardsList);
-
-  return [
-    {
-      label: `All`,
-      count: filterCount.all,
-      checked: true,
-      disabled: false
-    },
-    {
-      label: `Overdue`,
-      count: filterCount.overdue,
-      checked: false,
-      disabled: true
-    },
-    {
-      label: `Today`,
-      count: filterCount.today,
-      checked: false,
-      disabled: true
-    },
-    {
-      label: `Favorites`,
-      count: filterCount.favorites,
-      checked: false,
-      disabled: false
-    },
-    {
-      label: `Repeating`,
-      count: filterCount.repeating,
-      checked: false,
-      disabled: false
-    },
-    {
-      label: `Tags`,
-      count: filterCount.tags,
-      checked: false,
-      disabled: false
-    },
-    {
-      label: `Archive`,
-      count: filterCount.archive,
-      checked: false,
-      disabled: false
-    }
-  ];
+const mainFilters = {
+  all: 0,
+  overdue: 0,
+  today: 0,
+  favorites: 0,
+  repeating: 0,
+  tags: 0,
+  archive: 0
 };
 
+const getMainFiltersList = (cardsList) => {
+  const filterCount = getFiltersCount(cardsList, mainFilters);
+
+  return Object.keys(mainFilters).map((filter) => {
+    return {
+      title: filter,
+      count: filterCount[filter]
+    };
+  });
+
+};
 
 export {
   getCardsList,
