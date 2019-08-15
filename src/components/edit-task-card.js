@@ -1,4 +1,4 @@
-import {allColors} from '../data';
+import {ALL_COLORS} from '../data';
 
 const getEditCardComponent = ({
   description,
@@ -10,6 +10,7 @@ const getEditCardComponent = ({
   isArchive
 }) => {
   const isRepeating = Object.values(repeatingDays).some((day) => day);
+  const dueDateFormated = new Date(dueDate).toDateString();
   return `
     <article class="card card--edit card--${color}">
       <form class="card__form" method="get">
@@ -46,7 +47,7 @@ const getEditCardComponent = ({
             <div class="card__details">
               <div class="card__dates">
                 <button class="card__date-deadline-toggle" type="button">
-                  date: <span class="card__date-status">no</span>
+                  date: <span class="card__date-status">${dueDate ? dueDateFormated : `no`}</span>
                 </button>
 
                 <fieldset class="card__date-deadline" disabled>
@@ -54,7 +55,7 @@ const getEditCardComponent = ({
                     <input
                       class="card__date"
                       type="text"
-                      value="${new Date(dueDate).toDateString()}"
+                      value="${dueDateFormated}"
                       placeholder="23 September"
                       name="date"
                       disabled=${isRepeating}
@@ -92,7 +93,7 @@ const getEditCardComponent = ({
             <div class="card__colors-inner">
               <h3 class="card__colors-title">Color</h3>
               <div class="card__colors-wrap">
-              ${allColors.map((colorElement) => getColorRadioInput(colorElement, colorElement === color)).join(``)}
+              ${ALL_COLORS.map((colorElement) => getColorRadioInput(colorElement, colorElement === color)).join(``)}
               </div>
             </div>
           </div>

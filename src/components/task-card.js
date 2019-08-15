@@ -8,6 +8,8 @@ const getTaskCardComponent = ({
   isArchive
 }) => {
   const isRepeating = Object.values(repeatingDays).some((day) => day);
+  const dueDateString = dueDate ? new Date(dueDate) : ``;
+
   return `
     <article class="card card--${color} ${isRepeating ? `card--repeat` : ``}">
       <div class="card__form">
@@ -42,8 +44,8 @@ const getTaskCardComponent = ({
               <div class="card__dates">
                 <div class="card__date-deadline">
                   <p class="card__input-deadline-wrap">
-                    <span class="card__date">${new Date(dueDate).toDateString()}</span>
-                    <span class="card__time">${new Date(dueDate).toTimeString().slice(0, 5)}</span>
+                    <span class="card__date">${dueDateString ? dueDateString.toDateString() : ``}</span>
+                    <span class="card__time">${dueDateString ? dueDateString.toTimeString().slice(0, 5) : ``}</span>
                   </p>
                 </div>
               </div>

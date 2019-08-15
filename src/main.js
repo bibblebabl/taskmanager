@@ -23,11 +23,11 @@ const reRenderComponent = (target, component) => {
   target.innerHTML = component;
 };
 
-const loadMoreCards = () => {
+const onLoadMoreButtonClick = () => {
   const boardTasksElement = document.querySelector(`.board__tasks`);
 
   if (cardsCountToShow + CARDS_PER_PAGE >= CARDS_COUNT) {
-    loadMoreButtonElement.remove();
+    loadMoreButton.remove();
   }
 
   cardsCountToShow += CARDS_PER_PAGE;
@@ -44,5 +44,5 @@ renderComponent(mainContainer, getSearchComponent());
 renderComponent(mainContainer, getMainFiltersComponent(mainFiltersList));
 renderComponent(mainContainer, getBoard(cards.slice(0, cardsCountToShow)));
 
-const loadMoreButtonElement = document.querySelector(`.load-more`);
-loadMoreButtonElement.addEventListener(`click`, loadMoreCards);
+const loadMoreButton = document.querySelector(`.load-more`);
+loadMoreButton.addEventListener(`click`, onLoadMoreButtonClick);
