@@ -9,9 +9,14 @@ const getTaskCardComponent = ({
 }) => {
   const isRepeating = Object.values(repeatingDays).some((day) => day);
   const dueDateString = dueDate ? new Date(dueDate) : ``;
+  const isAfterDeadline = dueDate && dueDate < Date.now();
 
   return `
-    <article class="card card--${color} ${isRepeating ? `card--repeat` : ``}">
+    <article class="card
+     card--${color}
+     ${isAfterDeadline ? `card--deadline` : ``}
+     ${isRepeating ? `card--repeat` : ``}
+    ">
       <div class="card__form">
         <div class="card__inner">
           <div class="card__control">

@@ -47,10 +47,10 @@ const getEditCardComponent = ({
             <div class="card__details">
               <div class="card__dates">
                 <button class="card__date-deadline-toggle" type="button">
-                  date: <span class="card__date-status">${dueDate ? dueDateFormated : `no`}</span>
+                  date: <span class="card__date-status">${dueDate ? `yes` : `no`}</span>
                 </button>
 
-                <fieldset class="card__date-deadline" disabled>
+                <fieldset class="card__date-deadline" ${isRepeating ? `disabled` : `` }>
                   <label class="card__input-deadline-wrap">
                     <input
                       class="card__date"
@@ -76,7 +76,7 @@ const getEditCardComponent = ({
               <div class="card__hashtag">
                 <div class="card__hashtag-list">
 
-                ${Array.from(tags).map((el) => `#${el}`).join(` `)}
+                ${Array.from(tags).map((el) => getCardHashtag(el)).join(` `)}
                 </div>
 
                 <label>
@@ -141,6 +141,25 @@ const getColorRadioInput = (color, checked, order = 1) => {
       >${color}</label
     >
   `;
+};
+
+const getCardHashtag = (tag) => {
+  return `
+  <span class="card__hashtag-inner">
+    <input
+      type="hidden"
+      name="hashtag"
+      value="repeat"
+      class="card__hashtag-hidden-input"
+    />
+    <p class="card__hashtag-name">
+    #${tag}
+    </p>
+    <button type="button" class="card__hashtag-delete">
+      delete
+    </button>
+  </span>
+  `.trim();
 };
 
 
