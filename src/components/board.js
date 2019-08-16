@@ -1,19 +1,16 @@
 import {getBoardFiltersComponent} from './board-filters';
-import {getTasksComponents} from './tasks-cards';
-import {getEditCardComponent} from './edit-task-card';
+import {getBoardTasks} from './board-tasks';
+
 import {getLoadMoreButtonComponent} from './load-more-button';
 
-const getBoard = (cardsCount) => {
+const getBoard = (cardsList) => {
   return `
-    <section class="board container">
-      ${getBoardFiltersComponent()}
-      <div class="board__tasks">
-        ${getEditCardComponent()}
-        ${getTasksComponents(cardsCount)}
-      </div>
-      ${getLoadMoreButtonComponent()}
-    </section>
-    `;
+  <section class="board container">
+    ${getBoardFiltersComponent()}
+    ${getBoardTasks(cardsList)}
+    ${getLoadMoreButtonComponent()}
+  </section>
+  `;
 };
 
 export {
