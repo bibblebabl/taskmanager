@@ -50,7 +50,7 @@ const getRandomTask = () => {
   };
 };
 
-const getCardsList = (cardsCount) => [...Array(cardsCount)].map(() => getRandomTask());
+const getTaskMocks = (cardsCount) => [...Array(cardsCount)].map(() => getRandomTask());
 
 const getMainFiltersList = (cardsList) => {
   const filterCount = getFiltersCount(cardsList, MAIN_FILTERS);
@@ -64,7 +64,7 @@ const getMainFiltersList = (cardsList) => {
 };
 
 export {
-  getCardsList,
+  getTaskMocks,
   getMainFiltersList,
   ALL_COLORS
 };

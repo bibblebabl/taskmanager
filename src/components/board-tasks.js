@@ -1,16 +1,16 @@
 import {getTasksComponents} from './tasks-cards';
-import {getEditCardComponent} from './edit-task-card';
+import {getTaskCardEditComponent} from './task-card-edit';
 
-const getBoardTasks = (cardsList) => {
+const getBoardTasksComponent = (cardsList) => {
   const [first, ...rest] = cardsList;
   return `
     <div class="board__tasks">
-      ${getEditCardComponent(first)}
+      ${getTaskCardEditComponent(first)}
       ${getTasksComponents(rest)}
     </div>
   `;
 };
 
 export {
-  getBoardTasks
+  getBoardTasksComponent
 };

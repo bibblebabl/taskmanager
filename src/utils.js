@@ -1,3 +1,4 @@
+// Получение случайных значений
 export const getRandomBoolean = () => Boolean(Math.round(Math.random()));
 
 export const getRandomNumber = (maxNumber) => Math.round(Math.random() * maxNumber);
@@ -12,6 +13,31 @@ export const getRandomArrayElement = (array) => array[getRandomNumber(array.leng
 
 export const getRandomArrayElements = (array, length) => {
   return array.slice(0, getRandomNumber(length || array.length - 1));
+};
+
+// Рендер
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
+
+export const renderComponent = (container, component) => {
+  container.insertAdjacentHTML(`beforeend`, component);
+};
+
+export const render = (container, component) => {
+  container.append(`beforeend`, component);
+};
+
+export const reRenderComponent = (target, component) => {
+  target.innerHTML = component;
+};
+
+export const unRender = (element) => {
+  if (element) {
+    element.remove();
+  }
 };
 
 export const getFiltersCount = (list, mainFilters) => {
