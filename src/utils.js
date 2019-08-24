@@ -16,6 +16,11 @@ export const getRandomArrayElements = (array, length) => {
 };
 
 // Рендер
+const Position = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
@@ -26,8 +31,12 @@ export const renderComponent = (container, component) => {
   container.insertAdjacentHTML(`beforeend`, component);
 };
 
-export const render = (container, element) => {
-  container.append(element);
+export const render = (container, element, position) => {
+  if (position === Position.AFTERBEGIN) {
+    container.prepend(element);
+  } else {
+    container.append(element);
+  }
 };
 
 export const reRenderComponent = (target, component) => {

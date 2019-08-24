@@ -180,7 +180,7 @@ class TaskCardEdit {
           </div>
         </form>
       </article>
-      `;
+    `.trim();
 
   }
 }
