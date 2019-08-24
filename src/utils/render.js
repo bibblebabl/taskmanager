@@ -8,7 +8,7 @@ export const render = (container, element) => {
   container.append(element);
 };
 
-export const unRender = (element) => {
+export const removeComponent = (element) => {
   if (element) {
     element.remove();
   }

@@ -8,7 +8,7 @@ import Board from './components/board';
 import {renderCardTasksComponents} from './components/tasks-cards';
 import LoadMoreButton from './components/load-more-button';
 
-import {render, unRender} from './utils/render';
+import {render, removeComponent} from './utils/render';
 
 const CARDS_COUNT = 21;
 const CARDS_PER_PAGE = 8;
@@ -31,7 +31,7 @@ const onLoadMoreButtonClick = () => {
   const upatedCardsList = mockCards.slice(cardsShown, cardsCountToShow);
   cardsShown += CARDS_PER_PAGE;
 
-  unRender(loadMoreButtonElement);
+  removeComponent(loadMoreButtonElement);
   renderCardTasksComponents(upatedCardsList, boardTasksContainer);
 
   if (cardsShown <= CARDS_COUNT) {
