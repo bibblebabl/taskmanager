@@ -1,50 +1,48 @@
-import {getTaskCardComponent, TaskCard} from './task-card';
+import {TaskCard} from './task-card';
 import {TaskCardEdit} from './task-card-edit';
 import {render} from '../utils';
 
-const getTasksComponents = (tasks) => {
-  return tasks.map((task) => getTaskCardComponent(task)).join(``);
+const renderCardTasksComponents = (tasks, boardTasksElement) => {
+  tasks.forEach((taskCard) => renderTaskCard(taskCard, boardTasksElement));
 };
 
-const renderTask = (task, tasksContainer) => {
-  const taskCard = new TaskCard(task);
-  const taskCardEdit = new TaskCardEdit(task);
+const renderTaskCard = (taskMock, boardTasksContainer) => {
+  const task = new TaskCard(taskMock);
+  const taskEdit = new TaskCardEdit(taskMock);
 
   const onEscKeyDown = (evt) => {
     if (evt.key === `Escape` || evt.key === `Esc`) {
-      tasksContainer.replaceChild(taskCard.getElement(), taskCardEdit.getElement());
+      boardTasksContainer.replaceChild(task.getElement(), taskEdit.getElement());
       document.removeEventListener(`keydown`, onEscKeyDown);
     }
   };
 
-  taskCard.getElement()
-    .querySelector(`.card__btn--edit`)
+  task.getElement().querySelector(`.card__btn--edit`)
     .addEventListener(`click`, () => {
-      tasksContainer.replaceChild(taskCardEdit.getElement(), taskCard.getElement());
+      boardTasksContainer.replaceChild(taskEdit.getElement(), task.getElement());
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
-  taskCardEdit.getElement().querySelector(`textarea`)
+  taskEdit.getElement().querySelector(`textarea`)
     .addEventListener(`focus`, () => {
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
 
-  taskCardEdit.getElement().querySelector(`textarea`)
+  taskEdit.getElement().querySelector(`textarea`)
     .addEventListener(`blur`, () => {
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
-  taskCardEdit.getElement()
+  taskEdit.getElement()
     .querySelector(`.card__save`)
     .addEventListener(`click`, () => {
-      tasksContainer.replaceChild(taskCard.getElement(), taskCardEdit.getElement());
+      boardTasksContainer.replaceChild(task.getElement(), taskEdit.getElement());
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
 
-  render(tasksContainer, taskCard.getElement());
+  render(boardTasksContainer, task.getElement());
 };
 
-
 export {
-  getTasksComponents
+  renderCardTasksComponents
 };

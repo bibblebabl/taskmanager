@@ -26,8 +26,8 @@ export const renderComponent = (container, component) => {
   container.insertAdjacentHTML(`beforeend`, component);
 };
 
-export const render = (container, component) => {
-  container.append(`beforeend`, component);
+export const render = (container, element) => {
+  container.append(element);
 };
 
 export const reRenderComponent = (target, component) => {

@@ -1,13 +1,6 @@
-import {getTasksComponents} from './tasks-cards';
-import {getTaskCardEditComponent} from './task-card-edit';
-
-const getBoardTasksComponent = (cardsList) => {
-  const [first, ...rest] = cardsList;
+const getBoardTasksComponent = () => {
   return `
-    <div class="board__tasks">
-      ${getTaskCardEditComponent(first)}
-      ${getTasksComponents(rest)}
-    </div>
+    <div class="board__tasks"></div>
   `;
 };
 

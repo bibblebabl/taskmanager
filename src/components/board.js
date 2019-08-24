@@ -1,18 +1,15 @@
 import {getBoardFiltersComponent} from './board-filters';
 import {getBoardTasksComponent} from './board-tasks';
 
-import {getLoadMoreButtonComponent} from './load-more-button';
-
-const getBoard = (cardsList) => {
+const getBoardComponent = () => {
   return `
     <section class="board container">
       ${getBoardFiltersComponent()}
-      ${getBoardTasksComponent(cardsList)}
-      ${getLoadMoreButtonComponent()}
+      ${getBoardTasksComponent()}
     </section>
   `;
 };
 
 export {
-  getBoard
+  getBoardComponent
 };
