@@ -2,7 +2,10 @@ import {
   getRandomBoolean,
   getRandomPositiveNegativeNumber,
   getRandomArrayElement,
-  getRandomArrayElements,
+  getRandomArrayElements
+} from './utils/random';
+
+import {
   getFiltersCount
 } from './utils';
 

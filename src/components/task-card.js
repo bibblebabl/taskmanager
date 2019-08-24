@@ -1,4 +1,4 @@
-import {createElement} from '../utils';
+import {createElement} from '../utils/render';
 
 class TaskCard {
   constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {

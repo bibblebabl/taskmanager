@@ -1,6 +1,6 @@
 import {TaskCard} from './task-card';
 import {TaskCardEdit} from './task-card-edit';
-import {render} from '../utils';
+import {render} from '../utils/render';
 
 const renderCardTasksComponents = (tasks, boardTasksElement) => {
   tasks.forEach((taskCard) => renderTaskCard(taskCard, boardTasksElement));

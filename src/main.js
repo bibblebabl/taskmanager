@@ -1,51 +1,62 @@
-
 import {getTaskMocks, getMainFiltersList} from './data';
 
-import {getMenuComponent} from './components/menu';
-import {getSearchComponent} from './components/search';
-import {getMainFiltersComponent} from './components/main-filters';
-import {getBoardComponent} from './components/board';
-import {getBoardTasksComponent} from './components/board-tasks';
+import Menu from './components/menu';
+import Search from './components/search';
+import MainFilters from './components/main-filters';
+import Board from './components/board';
+import BoardFilters from './components/board-filters';
 import {renderCardTasksComponents} from './components/tasks-cards';
-import {getLoadMoreButtonComponent} from './components/load-more-button';
+import LoadMoreButton from './components/load-more-button';
 
-import {renderComponent, reRenderComponent, unRender} from './utils';
+import {render, unRender, Position} from './utils/render';
 
 const CARDS_COUNT = 21;
 const CARDS_PER_PAGE = 8;
+let cardsShown = 0;
 
 let cardsCountToShow = CARDS_PER_PAGE;
 
 const mockCards = getTaskMocks(CARDS_COUNT);
 const mainFiltersList = getMainFiltersList(mockCards);
 
+const menuComponent = new Menu();
+const searchComponent = new Search();
+const mainFiltersComponent = new MainFilters(mainFiltersList);
+
+const boardComponent = new Board();
+const boardFiltersComponent = new BoardFilters();
+const loadMoreButtonComponent = new LoadMoreButton();
+
 const onLoadMoreButtonClick = () => {
-  const boardTasksElement = document.querySelector(`.board__tasks`);
-
-  if (cardsCountToShow + CARDS_PER_PAGE >= CARDS_COUNT) {
-    unRender(loadMoreButton);
-  }
-
   cardsCountToShow += CARDS_PER_PAGE;
-  const upatedCardsList = mockCards.slice(0, cardsCountToShow);
+  const upatedCardsList = mockCards.slice(cardsShown, cardsCountToShow);
+  cardsShown += CARDS_PER_PAGE;
 
-  reRenderComponent(boardTasksElement, getBoardTasksComponent(upatedCardsList));
+  unRender(loadMoreButtonElement);
+  renderCardTasksComponents(upatedCardsList, boardTasksContainer);
+
+  if (cardsShown <= CARDS_COUNT) {
+    render(boardTasksContainer, loadMoreButtonComponent.getElement());
+  }
 };
 
 const mainContainer = document.querySelector(`.main`);
 const controlContainer = document.querySelector(`.main__control`);
 
-renderComponent(controlContainer, getMenuComponent());
-renderComponent(mainContainer, getSearchComponent());
-renderComponent(mainContainer, getMainFiltersComponent(mainFiltersList));
-renderComponent(mainContainer, getBoardComponent());
+render(controlContainer, menuComponent.getElement());
+render(mainContainer, searchComponent.getElement());
+render(mainContainer, mainFiltersComponent.getElement());
+render(mainContainer, boardComponent.getElement());
 
-
+const boardContainer = document.querySelector(`.board`);
 const boardTasksContainer = document.querySelector(`.board__tasks`);
 
+render(boardContainer, boardFiltersComponent.getElement(), Position.AFTERBEGIN);
 renderCardTasksComponents(mockCards.slice(0, cardsCountToShow), boardTasksContainer);
 
-renderComponent(boardTasksContainer, getLoadMoreButtonComponent());
+cardsShown += cardsCountToShow;
 
-const loadMoreButton = document.querySelector(`.load-more`);
-loadMoreButton.addEventListener(`click`, onLoadMoreButtonClick);
+render(boardTasksContainer, loadMoreButtonComponent.getElement());
+
+const loadMoreButtonElement = document.querySelector(`.load-more`);
+loadMoreButtonElement.addEventListener(`click`, onLoadMoreButtonClick);
