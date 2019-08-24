@@ -1,5 +1,5 @@
-import {TaskCard} from './task-card';
-import {TaskCardEdit} from './task-card-edit';
+import TaskCard from './task-card';
+import TaskCardEdit from './task-card-edit';
 import {render} from '../utils/render';
 
 const renderCardTasksComponents = (tasks, boardTasksElement) => {
@@ -17,18 +17,21 @@ const renderTaskCard = (taskMock, boardTasksContainer) => {
     }
   };
 
-  task.getElement().querySelector(`.card__btn--edit`)
+  task.getElement()
+    .querySelector(`.card__btn--edit`)
     .addEventListener(`click`, () => {
       boardTasksContainer.replaceChild(taskEdit.getElement(), task.getElement());
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
-  taskEdit.getElement().querySelector(`textarea`)
+  taskEdit.getElement()
+    .querySelector(`textarea`)
     .addEventListener(`focus`, () => {
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
 
-  taskEdit.getElement().querySelector(`textarea`)
+  taskEdit.getElement()
+    .querySelector(`textarea`)
     .addEventListener(`blur`, () => {
       document.addEventListener(`keydown`, onEscKeyDown);
     });

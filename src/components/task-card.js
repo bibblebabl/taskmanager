@@ -1,6 +1,6 @@
 import {createElement} from '../utils/render';
 
-class TaskCard {
+export default class TaskCard {
   constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {
     this._description = description;
     this._dueDate = dueDate;
@@ -90,8 +90,3 @@ class TaskCard {
     `.trim();
   }
 }
-
-export {
-  // getTaskCardComponent,
-  TaskCard
-};

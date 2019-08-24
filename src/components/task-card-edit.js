@@ -1,7 +1,8 @@
-import {ALL_COLORS} from '../data';
+import {ALL_COLORS} from '../data/constants';
 import {createElement} from '../utils/render';
+import {objectHasSomeTruthyValue} from '../utils';
 
-class TaskCardEdit {
+export default class TaskCardEdit {
   constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {
     this._description = description;
     this._dueDate = new Date(dueDate);
@@ -26,6 +27,10 @@ class TaskCardEdit {
 
   removeElement() {
     this._element = null;
+  }
+
+  getRepeatingDays() {
+    return Object.entries(this._repeatingDays).map(([day, value]) => this.getRepeatingDaysCheckbox(day, value)).join(``);
   }
 
   getRepeatingDaysCheckbox(day, checked, order = 1) {
@@ -82,9 +87,10 @@ class TaskCardEdit {
     `.trim();
   }
 
+
   getTemplate() {
-    const isRepeating = Object.values(this._repeatingDays).some((day) => day);
-    const dueDateFormated = new Date(this._dueDate).toDateString();
+    const isRepeating = objectHasSomeTruthyValue(this._repeatingDays);
+    const dueDateFormated = this._dueDate.toDateString();
 
     return `
       <article class="card card--edit card--${this._color}">
@@ -122,7 +128,7 @@ class TaskCardEdit {
               <div class="card__details">
                 <div class="card__dates">
                   <button class="card__date-deadline-toggle" type="button">
-                    date: <span class="card__date-status">${this._dueDate ? `yes` : `no`}</span>
+                  date: <span class="card__date-status">${this._dueDate ? `yes` : `no`}</span>
                   </button>
 
                   <fieldset class="card__date-deadline" ${isRepeating ? `disabled` : `` }>
@@ -144,14 +150,14 @@ class TaskCardEdit {
 
                   <fieldset class="card__repeat-days">
                     <div class="card__repeat-days-inner">
-                    ${Object.entries(this._repeatingDays).map(([day, value]) => this.getRepeatingDaysCheckbox(day, value)).join(``)}
+                    ${this.getRepeatingDays()}
                   </fieldset>
                 </div>
 
                 <div class="card__hashtag">
                   <div class="card__hashtag-list">
 
-                  ${Array.from(this._tags).map((el) => this.getCardHashtag(el)).join(` `)}
+                  ${Array.from(this._tags).map((el) => this.getCardHashtag(el)).join(``)}
                   </div>
 
                   <label>
@@ -184,7 +190,3 @@ class TaskCardEdit {
 
   }
 }
-
-export {
-  TaskCardEdit
-};

@@ -3,23 +3,16 @@ import {
   getRandomPositiveNegativeNumber,
   getRandomArrayElement,
   getRandomArrayElements
-} from './utils/random';
+} from '../utils/random';
 
 import {
   getFiltersCount
-} from './utils';
+} from '../utils';
 
-const ALL_COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
-
-const MAIN_FILTERS = {
-  all: 0,
-  overdue: 0,
-  today: 0,
-  favorites: 0,
-  repeating: 0,
-  tags: 0,
-  archive: 0
-};
+import {
+  ALL_COLORS,
+  MAIN_FILTERS
+} from './constants';
 
 const getRandomTask = () => {
   const isRepeating = getRandomBoolean();
@@ -68,6 +61,5 @@ const getMainFiltersList = (cardsList) => {
 
 export {
   getTaskMocks,
-  getMainFiltersList,
-  ALL_COLORS
+  getMainFiltersList
 };
