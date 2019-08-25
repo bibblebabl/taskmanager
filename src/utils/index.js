@@ -1,5 +1,7 @@
 export const objectHasSomeTruthyValue = (object) => Object.values(object).some((key) => key);
 
+export const isEscButton = (key) => key === `Escape` || key === `Esc`;
+
 export const getFiltersCount = (list, mainFilters) => {
   const currentDate = new Date();
 

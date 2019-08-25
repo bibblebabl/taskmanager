@@ -1,5 +1,6 @@
 import TaskCard from './task-card';
 import TaskCardEdit from './task-card-edit';
+import {isEscButton} from '../utils';
 import {render} from '../utils/render';
 
 const renderCardTasksComponents = (tasks, boardTasksElement) => {
@@ -11,7 +12,7 @@ const renderTaskCard = (taskMock, boardTasksContainer) => {
   const taskEdit = new TaskCardEdit(taskMock);
 
   const onEscKeyDown = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
+    if (isEscButton(evt.key)) {
       boardTasksContainer.replaceChild(task.getElement(), taskEdit.getElement());
       document.removeEventListener(`keydown`, onEscKeyDown);
     }
