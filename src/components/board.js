@@ -1,18 +1,37 @@
-import {getBoardFiltersComponent} from './board-filters';
-import {getBoardTasks} from './board-tasks';
+import {createElement} from '../utils/render';
 
-import {getLoadMoreButtonComponent} from './load-more-button';
+export default class Board {
+  constructor(filters) {
+    this._filters = filters;
+    this._element = null;
+  }
 
-const getBoard = (cardsList) => {
-  return `
-  <section class="board container">
-    ${getBoardFiltersComponent()}
-    ${getBoardTasks(cardsList)}
-    ${getLoadMoreButtonComponent()}
-  </section>
-  `;
-};
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
 
-export {
-  getBoard
-};
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+  getFilter(filter) {
+    return `
+      <a href="#" class="board__filter">${filter}</a>
+    `.trim();
+  }
+
+  getTemplate() {
+    return `
+      <section class="board container">
+        <div class="board__filter-list">
+          ${this._filters.map((filter) => this.getFilter(filter)).join(``)}
+        </div>
+        <div class="board__tasks"></div>
+      </section>
+    `.trim();
+  }
+}

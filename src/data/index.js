@@ -2,13 +2,18 @@ import {
   getRandomBoolean,
   getRandomPositiveNegativeNumber,
   getRandomArrayElement,
-  getRandomArrayElements,
+  getRandomArrayElements
+} from '../utils/random';
+
+import {
+  ALL_COLORS
+} from './constants';
+
+import {
   getFiltersCount
-} from './utils';
+} from '../utils';
 
-const ALL_COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
-
-const MAIN_FILTERS = {
+export const MAIN_FILTERS = {
   all: 0,
   overdue: 0,
   today: 0,
@@ -17,6 +22,7 @@ const MAIN_FILTERS = {
   tags: 0,
   archive: 0
 };
+
 
 const getRandomTask = () => {
   const isRepeating = getRandomBoolean();
@@ -50,7 +56,7 @@ const getRandomTask = () => {
   };
 };
 
-const getCardsList = (cardsCount) => [...Array(cardsCount)].map(() => getRandomTask());
+const getTaskMocks = (cardsCount) => [...Array(cardsCount)].map(() => getRandomTask());
 
 const getMainFiltersList = (cardsList) => {
   const filterCount = getFiltersCount(cardsList, MAIN_FILTERS);
@@ -64,7 +70,6 @@ const getMainFiltersList = (cardsList) => {
 };
 
 export {
-  getCardsList,
-  getMainFiltersList,
-  ALL_COLORS
+  getTaskMocks,
+  getMainFiltersList
 };
