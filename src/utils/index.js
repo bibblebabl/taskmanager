@@ -19,3 +19,11 @@ export const getFiltersCount = (list, mainFilters) => {
 
   return filters;
 };
+
+export const getFilterCount = (filters, title) => {
+  return filters.find((filter) => filter.title === title).count;
+};
+
+export const checkFiltersEmptyOrArchived = (filters) => {
+  return getFilterCount(filters, `all`) === getFilterCount(filters, `archive`);
+};

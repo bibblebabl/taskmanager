@@ -3,7 +3,7 @@ import TaskCardEdit from './task-card-edit';
 import {isEscButton} from '../utils';
 import {render} from '../utils/render';
 
-const renderCardTasksComponents = (tasks, boardTasksElement) => {
+export const renderCardTasksComponents = (tasks, boardTasksElement) => {
   tasks.forEach((taskCard) => renderTaskCard(taskCard, boardTasksElement));
 };
 
@@ -44,9 +44,12 @@ const renderTaskCard = (taskMock, boardTasksContainer) => {
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
 
-  render(boardTasksContainer, task.getElement());
-};
+  taskEdit.getElement()
+    .querySelector(`.card__form`)
+    .addEventListener(`submit`, () => {
+      boardTasksContainer.replaceChild(taskEdit.getElement(), task.getElement());
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
 
-export {
-  renderCardTasksComponents
+  render(boardTasksContainer, task.getElement());
 };
