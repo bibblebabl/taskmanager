@@ -32,6 +32,7 @@ const onLoadMoreButtonClick = () => {
   cardsShown += CARDS_PER_PAGE;
 
   removeComponent(loadMoreButtonElement);
+  loadMoreButtonComponent.removeElement();
   renderCardTasksComponents(upatedCardsList, boardTasksContainer);
 
   if (cardsShown <= CARDS_COUNT) {

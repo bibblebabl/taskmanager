@@ -8,7 +8,6 @@ export default class TaskCardEdit {
     this._dueDate = new Date(dueDate);
     this._tags = tags;
     this._color = color;
-    this._element = null;
     this._repeatingDays = repeatingDays;
 
     this._isFavorite = isFavorite;
