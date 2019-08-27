@@ -5,7 +5,6 @@ export default class BoardTasks extends AbstractComponent {
   constructor(filters) {
     super();
     this._filters = filters;
-    this._element = null;
   }
 
   getTemplate() {

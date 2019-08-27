@@ -14,7 +14,6 @@ export default class TaskCardEdit extends AbstractComponent {
 
     this._isFavorite = isFavorite;
     this._isArchive = isArchive;
-
   }
 
   getRepeatingDays() {
