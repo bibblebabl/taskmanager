@@ -7,8 +7,11 @@ import MainFilters from './components/main-filters';
 import Board from './components/board';
 import {renderCardTasksComponents} from './components/tasks-cards';
 import LoadMoreButton from './components/load-more-button';
+import BoardTasks from './components/board-tasks';
+import BoardNoTasks from './components/board-no-tasks';
 
 import {render, removeComponent} from './utils/render';
+import {checkFiltersEmptyOrArchived} from './utils';
 
 const CARDS_COUNT = 21;
 const CARDS_PER_PAGE = 8;
@@ -23,16 +26,23 @@ const menuComponent = new Menu();
 const searchComponent = new Search();
 const mainFiltersComponent = new MainFilters(mainFiltersList);
 const loadMoreButtonComponent = new LoadMoreButton();
+const boardTasksComponent = new BoardTasks();
+const boardNoTasksComponent = new BoardNoTasks();
 
 const boardComponent = new Board(BOARD_FILTERS);
 
 const onLoadMoreButtonClick = () => {
   cardsCountToShow += CARDS_PER_PAGE;
+
   const upatedCardsList = mockCards.slice(cardsShown, cardsCountToShow);
   cardsShown += CARDS_PER_PAGE;
 
+  const boardTasksContainer = document.querySelector(`.board__tasks`);
+  const loadMoreButtonElement = document.querySelector(`.load-more`);
+
   removeComponent(loadMoreButtonElement);
   loadMoreButtonComponent.removeElement();
+
   renderCardTasksComponents(upatedCardsList, boardTasksContainer);
 
   if (cardsShown <= CARDS_COUNT) {
@@ -48,13 +58,22 @@ render(mainContainer, searchComponent.getElement());
 render(mainContainer, mainFiltersComponent.getElement());
 render(mainContainer, boardComponent.getElement());
 
-const boardTasksContainer = document.querySelector(`.board__tasks`);
+const boardContainer = document.querySelector(`.board`);
 
-renderCardTasksComponents(mockCards.slice(0, cardsCountToShow), boardTasksContainer);
+if (mockCards.length === 0 || checkFiltersEmptyOrArchived(mainFiltersList)) {
+  render(boardContainer, boardNoTasksComponent.getElement());
+} else {
+  render(boardContainer, boardTasksComponent.getElement());
+  const boardTasksContainer = document.querySelector(`.board__tasks`);
 
-cardsShown += cardsCountToShow;
+  renderCardTasksComponents(mockCards.slice(0, cardsCountToShow), boardTasksContainer);
 
-render(boardTasksContainer, loadMoreButtonComponent.getElement());
+  cardsShown += cardsCountToShow;
 
-const loadMoreButtonElement = document.querySelector(`.load-more`);
-loadMoreButtonElement.addEventListener(`click`, onLoadMoreButtonClick);
+  render(boardTasksContainer, loadMoreButtonComponent.getElement());
+
+  const loadMoreButtonElement = document.querySelector(`.load-more`);
+  loadMoreButtonElement.addEventListener(`click`, onLoadMoreButtonClick);
+}
+
+

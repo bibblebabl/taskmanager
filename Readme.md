@@ -1,7 +1,7 @@
 # Личный проект «Менеджер задач» [![Build status][travis-image]][travis-url]
 
 * Студент: [Игорь Белогуров](https://up.htmlacademy.ru/ecmascript/9/user/1026635).
-* Наставник: [Алексей Балесный](https://htmlacademy.ru/profile/id221665).
+* Наставник: [Олег Петров](https://htmlacademy.ru/profile/fyvfyv).
 
 ---
 
