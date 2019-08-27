@@ -60,7 +60,7 @@ render(mainContainer, boardComponent.getElement());
 
 const boardContainer = document.querySelector(`.board`);
 
-if (mockCards.length === 0 || checkFiltersEmptyOrArchived) {
+if (mockCards.length === 0 || checkFiltersEmptyOrArchived(mainFiltersList)) {
   render(boardContainer, boardNoTasksComponent.getElement());
 } else {
   render(boardContainer, boardTasksComponent.getElement());
