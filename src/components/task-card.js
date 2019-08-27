@@ -1,7 +1,8 @@
-import {createElement} from '../utils/render';
+import AbstractComponent from './abstract-component';
 
-export default class TaskCard {
+export default class TaskCard extends AbstractComponent {
   constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {
+    super();
     this._description = description;
     this._dueDate = dueDate;
     this._repeatingDays = repeatingDays;
@@ -9,20 +10,6 @@ export default class TaskCard {
     this._color = color;
     this._isFavorite = isFavorite;
     this._isArchive = isArchive;
-
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   getCardHashtag(tag) {

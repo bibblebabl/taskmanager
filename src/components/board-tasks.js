@@ -1,20 +1,10 @@
-import {createElement} from '../utils/render';
+import AbstractComponent from './abstract-component';
 
-export default class BoardTasks {
+
+export default class BoardTasks extends AbstractComponent {
   constructor(filters) {
+    super();
     this._filters = filters;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
     this._element = null;
   }
 

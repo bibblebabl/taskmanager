@@ -1,9 +1,11 @@
 import {ALL_COLORS} from '../data/constants';
-import {createElement} from '../utils/render';
+import AbstractComponent from './abstract-component';
+
 import {objectHasSomeTruthyValue} from '../utils';
 
-export default class TaskCardEdit {
+export default class TaskCardEdit extends AbstractComponent {
   constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {
+    super();
     this._description = description;
     this._dueDate = new Date(dueDate);
     this._tags = tags;
@@ -13,19 +15,6 @@ export default class TaskCardEdit {
     this._isFavorite = isFavorite;
     this._isArchive = isArchive;
 
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   getRepeatingDays() {

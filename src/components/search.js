@@ -1,20 +1,9 @@
-import {createElement} from '../utils/render';
+import AbstractComponent from './abstract-component';
 
-export default class Search {
+
+export default class Search extends AbstractComponent {
   constructor() {
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    super();
   }
 
   getTemplate() {
