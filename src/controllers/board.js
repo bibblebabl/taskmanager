@@ -6,13 +6,12 @@ import TaskCardEdit from '../components/task-card-edit';
 import LoadMoreButton from '../components/load-more-button';
 import BoardNoTasks from '../components/board-no-tasks';
 
-import {CARDS_PER_PAGE} from '../data/constants';
 import {isEscButton, checkFiltersEmptyOrArchived} from '../utils';
 import {render, removeComponent} from '../utils/render';
 // import {checkFiltersEmptyOrArchived} from './utils';
 
 export default class BoardController {
-  constructor({container, tasks, boardFilters, mainFilters}) {
+  constructor({container, tasks, boardFilters, tasksCardsPerPage, mainFilters}) {
     this._container = container;
     this._tasks = tasks;
     this._board = new Board();
@@ -23,6 +22,7 @@ export default class BoardController {
     this._loadMoreButton = new LoadMoreButton();
 
     this._cardsShown = 0;
+    this._tasksCardsPerPage = tasksCardsPerPage;
   }
 
   init() {
@@ -34,7 +34,7 @@ export default class BoardController {
     } else {
       render(this._board.getElement(), this._boardTasks.getElement());
 
-      this._cardsShown += CARDS_PER_PAGE;
+      this._cardsShown += this._tasksCardsPerPage;
       this._renderTaskCards();
 
       this._renderLoadMoreButton();
@@ -136,7 +136,7 @@ export default class BoardController {
   }
 
   _onLoadMoreButtonClick() {
-    this._cardsShown += CARDS_PER_PAGE;
+    this._cardsShown += this._tasksCardsPerPage;
     this._renderTaskCards();
 
     this._renderLoadMoreButton();

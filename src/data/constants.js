@@ -1,8 +1,8 @@
 export const ALL_COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
 
-export const CARDS_COUNT = 21;
+export const TASKS_COUNT = 21;
 
-export const CARDS_PER_PAGE = 8;
+export const TASKS_CARDS_PER_PAGE = 8;
 
 export const BOARD_FILTERS = [
   {

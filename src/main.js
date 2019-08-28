@@ -1,5 +1,5 @@
 import {getTaskMocks, getMainFiltersList} from './data';
-import {CARDS_COUNT, BOARD_FILTERS} from './data/constants';
+import {TASKS_COUNT, TASKS_CARDS_PER_PAGE, BOARD_FILTERS} from './data/constants';
 
 import Menu from './components/menu';
 import Search from './components/search';
@@ -8,8 +8,8 @@ import MainFilters from './components/main-filters';
 import {render} from './utils/render';
 import BoardController from './controllers/board';
 
-const mockCards = getTaskMocks(CARDS_COUNT);
-const mainFiltersList = getMainFiltersList(mockCards);
+const mockTasks = getTaskMocks(TASKS_COUNT);
+const mainFiltersList = getMainFiltersList(mockTasks);
 
 const menuComponent = new Menu();
 const searchComponent = new Search();
@@ -24,8 +24,9 @@ render(mainContainer, mainFiltersComponent.getElement());
 
 const boardController = new BoardController({
   container: mainContainer,
-  tasks: mockCards,
+  tasks: mockTasks,
   boardFilters: BOARD_FILTERS,
+  tasksCardsPerPage: TASKS_CARDS_PER_PAGE,
   mainFilters: mainFiltersList
 });
 
