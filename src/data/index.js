@@ -13,6 +13,7 @@ import {
   getFiltersCount
 } from '../utils';
 
+
 export const MAIN_FILTERS = {
   all: 0,
   overdue: 0,
@@ -52,7 +53,7 @@ const getRandomTask = () => {
     ], 3)),
     color: getRandomArrayElement(ALL_COLORS),
     isFavorite: getRandomBoolean(),
-    isArchive: getRandomBoolean(),
+    isArchive: getRandomBoolean()
   };
 };
 
