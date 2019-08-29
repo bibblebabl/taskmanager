@@ -1,5 +1,5 @@
 import {getTaskMocks, getMainFiltersList} from './data';
-import {TASKS_COUNT, TASKS_CARDS_PER_PAGE, BOARD_FILTERS} from './data/constants';
+import {TASKS_COUNT, TASKS_CARDS_PER_PAGE, BOARD_SORTING} from './data/constants';
 
 import Menu from './components/menu';
 import Search from './components/search';
@@ -25,7 +25,7 @@ render(mainContainer, mainFiltersComponent.getElement());
 const boardController = new BoardController({
   container: mainContainer,
   tasks: mockTasks,
-  boardFilters: BOARD_FILTERS,
+  sortingList: BOARD_SORTING,
   tasksCardsPerPage: TASKS_CARDS_PER_PAGE,
   mainFilters: mainFiltersList
 });

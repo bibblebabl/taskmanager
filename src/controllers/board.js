@@ -1,6 +1,6 @@
 import Board from '../components/board';
 import BoardTasks from '../components/board-tasks';
-import BoardFilterList from '../components/board-filter-list';
+import Sort from '../components/board-filter-list';
 import TaskCard from '../components/task-card';
 import TaskCardEdit from '../components/task-card-edit';
 import LoadMoreButton from '../components/load-more-button';
@@ -11,11 +11,11 @@ import {render, removeComponent} from '../utils/render';
 // import {checkFiltersEmptyOrArchived} from './utils';
 
 export default class BoardController {
-  constructor({container, tasks, boardFilters, tasksCardsPerPage, mainFilters}) {
+  constructor({container, tasks, sortingList, tasksCardsPerPage, mainFilters}) {
     this._container = container;
     this._tasks = tasks;
     this._board = new Board();
-    this._boardFilterList = new BoardFilterList(boardFilters);
+    this._sorting = new Sort(sortingList);
     this._mainFilters = mainFilters;
     this._boardTasks = new BoardTasks();
     this._boardNoTasks = new BoardNoTasks();
@@ -27,7 +27,7 @@ export default class BoardController {
 
   init() {
     render(this._container, this._board.getElement());
-    render(this._board.getElement(), this._boardFilterList.getElement());
+    render(this._board.getElement(), this._sorting.getElement());
 
     if (this._tasks.length === 0 || checkFiltersEmptyOrArchived(this._mainFilters)) {
       render(this._board.getElement(), this._boardNoTasks.getElement());
@@ -39,7 +39,7 @@ export default class BoardController {
 
       this._renderLoadMoreButton();
 
-      this._boardFilterList.getElement().addEventListener(`click`, (evt) => this._onSortLinkClick(evt));
+      this._sorting.getElement().addEventListener(`click`, (evt) => this._onSortLinkClick(evt));
     }
   }
 
