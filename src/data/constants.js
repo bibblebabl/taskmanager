@@ -4,7 +4,7 @@ export const TASKS_COUNT = 21;
 
 export const TASKS_CARDS_PER_PAGE = 8;
 
-export const BOARD_FILTERS = [
+export const BOARD_SORTING = [
   {
     title: `SORT BY DEFAULT`,
     type: `default`
