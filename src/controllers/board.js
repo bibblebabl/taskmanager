@@ -8,7 +8,6 @@ import BoardNoTasks from '../components/board-no-tasks';
 
 import {isEscButton, checkFiltersEmptyOrArchived} from '../utils';
 import {render, removeComponent} from '../utils/render';
-// import {checkFiltersEmptyOrArchived} from './utils';
 
 export default class BoardController {
   constructor({container, tasks, boardFilters, tasksCardsPerPage, mainFilters}) {
@@ -20,6 +19,9 @@ export default class BoardController {
     this._boardTasks = new BoardTasks();
     this._boardNoTasks = new BoardNoTasks();
     this._loadMoreButton = new LoadMoreButton();
+
+    this._lastCard = null;
+    this._lastEditingCard = null;
 
     this._cardsShown = 0;
     this._tasksCardsPerPage = tasksCardsPerPage;
@@ -64,7 +66,10 @@ export default class BoardController {
 
     const onEscKeyDown = (evt) => {
       if (isEscButton(evt.key)) {
-        this._boardTasks.getElement().replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+        if (this._boardTasks.getElement().contains(taskEditComponent.getElement())) {
+          this._replaceTaskCard(taskComponent.getElement(), taskEditComponent.getElement());
+        }
+        this._resetLastEditingCard();
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
@@ -73,6 +78,12 @@ export default class BoardController {
       .querySelector(`.card__btn--edit`)
       .addEventListener(`click`, () => {
         this._boardTasks.getElement().replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+        if (this._lastEditingCard) {
+          this._replaceTaskCard(this._lastCard, this._lastEditingCard);
+        }
+        this._lastEditingCard = taskEditComponent.getElement();
+        this._lastCard = taskComponent.getElement();
+
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
@@ -91,18 +102,29 @@ export default class BoardController {
     taskEditComponent.getElement()
       .querySelector(`.card__save`)
       .addEventListener(`click`, () => {
-        this._boardTasks.getElement().replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+        this._replaceTaskCard(taskComponent.getElement(), taskEditComponent.getElement());
+        this._resetLastEditingCard();
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
     taskEditComponent.getElement()
       .querySelector(`.card__form`)
       .addEventListener(`submit`, () => {
-        this._boardTasks.getElement().replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+        this._replaceTaskCard(taskEditComponent.getElement(), taskComponent.getElement());
+        this._resetLastEditingCard();
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
     render(this._boardTasks.getElement(), taskComponent.getElement());
+  }
+
+  _replaceTaskCard(newCard, oldCard) {
+    this._boardTasks.getElement().replaceChild(newCard, oldCard);
+  }
+
+  _resetLastEditingCard() {
+    this._lastEditingCard = null;
+    this._lastCard = null;
   }
 
   _getTasksToShow() {
