@@ -8,6 +8,7 @@ import BoardNoTasks from '../components/board-no-tasks';
 
 import {isEscButton, checkFiltersEmptyOrArchived} from '../utils';
 import {render, removeComponent} from '../utils/render';
+import {getSortedTasks} from '../utils/sort';
 
 export default class BoardController {
   constructor({container, tasks, sortingList, tasksCardsPerPage, mainFilters}) {
@@ -38,7 +39,6 @@ export default class BoardController {
 
       this._cardsShown += this._tasksCardsPerPage;
       this._renderTaskCards();
-
       this._renderLoadMoreButton();
 
       this._sorting.getElement().addEventListener(`click`, (evt) => this._onSortLinkClick(evt));
@@ -139,28 +139,14 @@ export default class BoardController {
     }
 
     this._boardTasks.getElement().innerHTML = ``;
-
-    switch (evt.target.dataset.sortType) {
-      case `date-up`:
-        const sortedByDateUpTasks = this._getTasksToShow().sort((a, b) => a.dueDate - b.dueDate);
-        sortedByDateUpTasks.forEach((taskMock) => this._renderTaskCard(taskMock));
-        break;
-      case `date-down`:
-        const sortedByDateDownTasks = this._getTasksToShow().sort((a, b) => b.dueDate - a.dueDate);
-        sortedByDateDownTasks.forEach((taskMock) => this._renderTaskCard(taskMock));
-        break;
-      case `default`:
-        this._getTasksToShow().forEach((taskMock) => this._renderTaskCard(taskMock));
-        break;
-    }
-
+    const sortedTasks = getSortedTasks(this._getTasksToShow(), evt.target.dataset.sortType);
+    sortedTasks.forEach((taskMock) => this._renderTaskCard(taskMock));
     this._renderLoadMoreButton();
   }
 
   _onLoadMoreButtonClick() {
     this._cardsShown += this._tasksCardsPerPage;
     this._renderTaskCards();
-
     this._renderLoadMoreButton();
   }
 }
