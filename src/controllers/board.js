@@ -6,6 +6,8 @@ import TaskCardEdit from '../components/task-card-edit';
 import LoadMoreButton from '../components/load-more-button';
 import BoardNoTasks from '../components/board-no-tasks';
 
+import {REPEATING_DAYS} from '../data';
+
 import {isEscButton, checkFiltersEmptyOrArchived} from '../utils';
 import {render, removeComponent} from '../utils/render';
 import {getSortedTasks} from '../utils/sort';
@@ -102,6 +104,24 @@ export default class BoardController {
     taskEditComponent.getElement()
       .querySelector(`.card__save`)
       .addEventListener(`click`, () => {
+
+        const formData = new FormData(taskEditComponent.getElement().querySelector(`.card__form`));
+
+        const entry = {
+          description: formData.get(`text`),
+          color: formData.get(`color`),
+          tags: new Set(formData.getAll(`hashtag`)),
+          dueDate: new Date(formData.get(`date`)),
+          repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
+            acc[it] = true;
+            return acc;
+          }, REPEATING_DAYS)
+        };
+
+        // this._tasks[this._tasks.findIndex((it) => it === task)] = entry;
+
+        // this._renderBoard(this._tasks);
+
         this._replaceTaskCard(taskComponent.getElement(), taskEditComponent.getElement());
         this._resetLastEditingCard();
         document.removeEventListener(`keydown`, onEscKeyDown);
@@ -109,13 +129,19 @@ export default class BoardController {
 
     taskEditComponent.getElement()
       .querySelector(`.card__form`)
-      .addEventListener(`submit`, () => {
-        this._replaceTaskCard(taskEditComponent.getElement(), taskComponent.getElement());
+      .addEventListener(`submit`, (evt) => {
+        evt.preventDefault();
+        this._replaceTaskCard(taskComponent.getElement(), taskEditComponent.getElement());
         this._resetLastEditingCard();
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
     render(this._boardTasks.getElement(), taskComponent.getElement());
+  }
+
+  _getFormData(component) {
+    const formData = new FormData(component.getElement().querySelector(`.card__form`));
+    return formData;
   }
 
   _replaceTaskCard(newCard, oldCard) {

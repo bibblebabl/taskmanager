@@ -13,6 +13,15 @@ import {
   getFiltersCount
 } from '../utils';
 
+const REPEATING_DAYS = {
+  'mo': false,
+  'tu': false,
+  'we': false,
+  'th': false,
+  'fr': false,
+  'sa': false,
+  'su': false,
+};
 
 export const MAIN_FILTERS = {
   all: 0,
@@ -72,5 +81,6 @@ const getMainFiltersList = (cardsList) => {
 
 export {
   getTaskMocks,
-  getMainFiltersList
+  getMainFiltersList,
+  REPEATING_DAYS
 };
