@@ -78,7 +78,7 @@ export default class TaskCardEdit extends AbstractComponent {
 
   getTemplate() {
     const isRepeating = objectHasSomeTruthyValue(this._repeatingDays);
-    const dueDateFormated = this._dueDate.toDateString();
+    const dueDateFormated = this._dueDate ? this._dueDate.toDateString() : null;
 
     return `
       <article class="card card--edit card--${this._color}">
@@ -116,10 +116,10 @@ export default class TaskCardEdit extends AbstractComponent {
               <div class="card__details">
                 <div class="card__dates">
                   <button class="card__date-deadline-toggle" type="button">
-                  date: <span class="card__date-status">${this._dueDate ? `yes` : `no`}</span>
+                  date: <span class="card__date-status">${this._dueDate !== null ? `yes` : `no`}</span>
                   </button>
 
-                  <fieldset class="card__date-deadline" ${this._dueDate ? `disabled` : ``}>
+                  <fieldset class="card__date-deadline" ${this._dueDate ? `` : `disabled`}>
                     <label class="card__input-deadline-wrap">
                       <input
                         class="card__date"
@@ -176,20 +176,18 @@ export default class TaskCardEdit extends AbstractComponent {
     `.trim();
   }
 
-  _onHashtagInputKeydown(evt) {
-    if (isEnterButton(evt.key)) {
-      evt.preventDefault();
-      this.getElement()
-        .querySelector(`.card__hashtag-list`)
-        .insertAdjacentHTML(`beforeend`,
-            this._getCardHashtag(evt.target.value));
-      evt.target.value = ``;
-    }
-  }
-
   _subscribeOnEvents() {
     this.getElement()
       .querySelector(`.card__hashtag-input`)
-      .addEventListener(`keydown`, this._onHashtagInputKeydown);
+      .addEventListener(`keydown`, (evt) => {
+        if (isEnterButton(evt.key)) {
+          evt.preventDefault();
+          this.getElement()
+            .querySelector(`.card__hashtag-list`)
+            .insertAdjacentHTML(`beforeend`,
+                this._getCardHashtag(evt.target.value));
+          evt.target.value = ``;
+        }
+      });
   }
 }
