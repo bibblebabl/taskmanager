@@ -65,7 +65,7 @@ export default class TaskController {
           description: formData.get(`text`),
           color: formData.get(`color`),
           tags: new Set(formData.getAll(`hashtag`)),
-          dueDate: new Date(formData.get(`date`)),
+          dueDate: new Date(formData.get(`date`)).getTime(),
           repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
             acc[it] = true;
             return acc;

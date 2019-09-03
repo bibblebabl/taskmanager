@@ -119,7 +119,7 @@ export default class TaskCardEdit extends AbstractComponent {
                   date: <span class="card__date-status">${this._dueDate ? `yes` : `no`}</span>
                   </button>
 
-                  <fieldset class="card__date-deadline" ${isRepeating ? `disabled` : ``}>
+                  <fieldset class="card__date-deadline">
                     <label class="card__input-deadline-wrap">
                       <input
                         class="card__date"
@@ -127,7 +127,6 @@ export default class TaskCardEdit extends AbstractComponent {
                         value="${dueDateFormated}"
                         placeholder="23 September"
                         name="date"
-                        disabled=${isRepeating}
                       />
                     </label>
                   </fieldset>
