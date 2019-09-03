@@ -14,6 +14,8 @@ export default class TaskCardEdit extends AbstractComponent {
 
     this._isFavorite = isFavorite;
     this._isArchive = isArchive;
+
+    this._subscribeOnEvents();
   }
 
   getRepeatingDays() {
@@ -74,7 +76,6 @@ export default class TaskCardEdit extends AbstractComponent {
     `.trim();
   }
 
-
   getTemplate() {
     const isRepeating = objectHasSomeTruthyValue(this._repeatingDays);
     const dueDateFormated = this._dueDate.toDateString();
@@ -118,7 +119,7 @@ export default class TaskCardEdit extends AbstractComponent {
                   date: <span class="card__date-status">${this._dueDate ? `yes` : `no`}</span>
                   </button>
 
-                  <fieldset class="card__date-deadline" ${isRepeating ? `disabled` : `` }>
+                  <fieldset class="card__date-deadline" ${isRepeating ? `disabled` : ``}>
                     <label class="card__input-deadline-wrap">
                       <input
                         class="card__date"
@@ -174,6 +175,29 @@ export default class TaskCardEdit extends AbstractComponent {
         </form>
       </article>
     `.trim();
+  }
 
+  _subscribeOnEvents() {
+    this.getElement()
+      .querySelector(`.card__hashtag-input`).addEventListener(`keydown`, (evt) => {
+        if (evt.key === `Enter`) {
+          evt.preventDefault();
+          this.getElement().querySelector(`.card__hashtag-list`).insertAdjacentHTML(`beforeend`, `<span class="card__hashtag-inner">
+            <input
+              type="hidden"
+              name="hashtag"
+              value="${evt.target.value}"
+              class="card__hashtag-hidden-input"
+            />
+            <p class="card__hashtag-name">
+              #${evt.target.value}
+            </p>
+            <button type="button" class="card__hashtag-delete">
+              delete
+            </button>
+          </span>`);
+          evt.target.value = ``;
+        }
+      });
   }
 }
