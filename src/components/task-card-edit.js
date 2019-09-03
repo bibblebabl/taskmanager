@@ -1,7 +1,7 @@
 import {ALL_COLORS} from '../data/constants';
 import AbstractComponent from './abstract-component';
 
-import {objectHasSomeTruthyValue} from '../utils';
+import {isEnterButton, objectHasSomeTruthyValue} from '../utils';
 
 export default class TaskCardEdit extends AbstractComponent {
   constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {
@@ -18,11 +18,11 @@ export default class TaskCardEdit extends AbstractComponent {
     this._subscribeOnEvents();
   }
 
-  getRepeatingDays() {
-    return Object.entries(this._repeatingDays).map(([day, value]) => this.getRepeatingDaysCheckbox(day, value)).join(``);
+  _getRepeatingDays() {
+    return Object.entries(this._repeatingDays).map(([day, value]) => this._getRepeatingDaysCheckbox(day, value)).join(``);
   }
 
-  getRepeatingDaysCheckbox(day, checked, order = 1) {
+  _getRepeatingDaysCheckbox(day, checked, order = 1) {
     const dayLowerCased = day.toLowerCase();
     return `
       <input
@@ -39,7 +39,7 @@ export default class TaskCardEdit extends AbstractComponent {
     `.trim();
   }
 
-  getColorRadioInput(color, checked, order = 1) {
+  _getColorRadioInput(color, checked, order = 1) {
     return `
       <input
         type="radio"
@@ -57,13 +57,13 @@ export default class TaskCardEdit extends AbstractComponent {
     `.trim();
   }
 
-  getCardHashtag(tag) {
+  _getCardHashtag(tag) {
     return `
       <span class="card__hashtag-inner">
         <input
           type="hidden"
           name="hashtag"
-          value="repeat"
+          value="${tag}"
           class="card__hashtag-hidden-input"
         />
         <p class="card__hashtag-name">
@@ -72,8 +72,8 @@ export default class TaskCardEdit extends AbstractComponent {
         <button type="button" class="card__hashtag-delete">
           delete
         </button>
-      </span>
-    `.trim();
+      </span>`
+      .trim();
   }
 
   getTemplate() {
@@ -119,7 +119,7 @@ export default class TaskCardEdit extends AbstractComponent {
                   date: <span class="card__date-status">${this._dueDate ? `yes` : `no`}</span>
                   </button>
 
-                  <fieldset class="card__date-deadline">
+                  <fieldset class="card__date-deadline" ${this._dueDate ? `disabled` : ``}>
                     <label class="card__input-deadline-wrap">
                       <input
                         class="card__date"
@@ -137,14 +137,14 @@ export default class TaskCardEdit extends AbstractComponent {
 
                   <fieldset class="card__repeat-days">
                     <div class="card__repeat-days-inner">
-                    ${this.getRepeatingDays()}
+                    ${this._getRepeatingDays()}
                   </fieldset>
                 </div>
 
                 <div class="card__hashtag">
                   <div class="card__hashtag-list">
 
-                  ${Array.from(this._tags).map((el) => this.getCardHashtag(el)).join(``)}
+                  ${Array.from(this._tags).map((el) => this._getCardHashtag(el)).join(``)}
                   </div>
 
                   <label>
@@ -161,7 +161,7 @@ export default class TaskCardEdit extends AbstractComponent {
               <div class="card__colors-inner">
                 <h3 class="card__colors-title">Color</h3>
                 <div class="card__colors-wrap">
-                ${ALL_COLORS.map((colorElement) => this.getColorRadioInput(colorElement, colorElement === this._color)).join(``)}
+                ${ALL_COLORS.map((colorElement) => this._getColorRadioInput(colorElement, colorElement === this._color)).join(``)}
                 </div>
               </div>
             </div>
@@ -176,27 +176,20 @@ export default class TaskCardEdit extends AbstractComponent {
     `.trim();
   }
 
+  _onHashtagInputKeydown(evt) {
+    if (isEnterButton(evt.key)) {
+      evt.preventDefault();
+      this.getElement()
+        .querySelector(`.card__hashtag-list`)
+        .insertAdjacentHTML(`beforeend`,
+            this._getCardHashtag(evt.target.value));
+      evt.target.value = ``;
+    }
+  }
+
   _subscribeOnEvents() {
     this.getElement()
-      .querySelector(`.card__hashtag-input`).addEventListener(`keydown`, (evt) => {
-        if (evt.key === `Enter`) {
-          evt.preventDefault();
-          this.getElement().querySelector(`.card__hashtag-list`).insertAdjacentHTML(`beforeend`, `<span class="card__hashtag-inner">
-            <input
-              type="hidden"
-              name="hashtag"
-              value="${evt.target.value}"
-              class="card__hashtag-hidden-input"
-            />
-            <p class="card__hashtag-name">
-              #${evt.target.value}
-            </p>
-            <button type="button" class="card__hashtag-delete">
-              delete
-            </button>
-          </span>`);
-          evt.target.value = ``;
-        }
-      });
+      .querySelector(`.card__hashtag-input`)
+      .addEventListener(`keydown`, this._onHashtagInputKeydown);
   }
 }
