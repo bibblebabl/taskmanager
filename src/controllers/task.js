@@ -28,24 +28,28 @@ export default class TaskController {
       }
     };
 
-    this._taskEditCard.getElement().querySelector(`textarea`)
+    this._taskEditCard.getElement()
+      .querySelector(`textarea`)
       .addEventListener(`focus`, () => {
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
-    this._taskEditCard.getElement().querySelector(`textarea`)
+    this._taskEditCard.getElement()
+      .querySelector(`textarea`)
       .addEventListener(`blur`, () => {
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
 
-    this._taskCard.getElement().querySelector(`.card__btn--edit`).addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-      this._onChangeView();
-      this._container.getElement().replaceChild(this._taskEditCard.getElement(), this._taskCard.getElement());
+    this._taskCard.getElement()
+      .querySelector(`.card__btn--edit`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        this._onChangeView();
+        this._container.getElement().replaceChild(this._taskEditCard.getElement(), this._taskCard.getElement());
 
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
+        document.addEventListener(`keydown`, onEscKeyDown);
+      });
 
     this._taskEditCard
       .getElement()
