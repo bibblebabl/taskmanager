@@ -89,25 +89,25 @@ export default class TaskCardEdit extends AbstractComponent {
 
     return `
       <article class="card card--edit card--${this._color} ${isRepeating ? `card--repeat` : ``}">
-        <form class="card__form" method="get">
-          <div class="card__inner">
-            <div class="card__control">
-              <button type="button" class="card__btn card__btn--archive ${this._isArchive ? `card__btn--disabled` : ``}">
-                archive
-              </button>
-              <button
-                type="button"
-                class="card__btn card__btn--favorites ${this._isFavorite ? `card__btn--disabled` : ``}"
-              >
-                favorites
-              </button>
-            </div>
+      <form class="card__form" method="get">
+        <div class="card__inner">
+          <div class="card__control">
+            <button type="button" class="card__btn card__btn--archive ${this._isArchive ? `card__btn--disabled` : ``}">
+              archive
+            </button>
+            <button
+              type="button"
+              class="card__btn card__btn--favorites ${this._isFavorite ? `card__btn--disabled` : ``}"
+            >
+              favorites
+            </button>
+          </div>
 
-            <div class="card__color-bar">
-              <svg width="100%" height="10">
-                <use xlink:href="#wave"></use>
-              </svg>
-            </div>
+          <div class="card__color-bar">
+            <svg class="card__color-bar-wave" width="100%" height="10">
+              <use xlink:href="#wave"></use>
+            </svg>
+          </div>
 
             <div class="card__textarea-wrap">
               <label>
