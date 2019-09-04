@@ -142,7 +142,7 @@ export default class TaskCardEdit extends AbstractComponent {
                     repeat:<span class="card__repeat-status">${isRepeating ? `yes` : `no`}</span>
                   </button>
 
-                  <fieldset class="card__repeat-days">
+                  <fieldset class="card__repeat-days" ${isRepeating ? `` : `disabled`}>
                     <div class="card__repeat-days-inner">
                     ${this._getRepeatingDays(this._repeatingDays)}
                   </fieldset>
@@ -189,12 +189,12 @@ export default class TaskCardEdit extends AbstractComponent {
       .addEventListener(`keydown`, this._onHashtagInputKeydown);
 
     this.getElement()
-      .querySelector(`.card__date-deadline-toggle`)
-      .addEventListener(`click`, this._onDeadlineToggleClick);
+      .querySelector(`.card__hashtag-list`)
+      .addEventListener(`click`, this._onHashtagListClick);
 
     this.getElement()
-      .querySelector(`.card__repeat-toggle`)
-      .addEventListener(`click`, this._onRepeatToggleClick);
+      .querySelector(`.card__date-deadline-toggle`)
+      .addEventListener(`click`, this._onDeadlineToggleClick);
 
     this.getElement()
       .querySelector(`.card__repeat-toggle`)
@@ -217,6 +217,13 @@ export default class TaskCardEdit extends AbstractComponent {
     }
   }
 
+  _onHashtagListClick(evt) {
+    evt.preventDefault();
+    if (evt.target.className === `card__hashtag-delete`) {
+      evt.target.parentNode.remove();
+    }
+  }
+
   _onDeadlineToggleClick(evt) {
     evt.preventDefault();
 
@@ -227,11 +234,12 @@ export default class TaskCardEdit extends AbstractComponent {
     if (dateDeadlineElement.hasAttribute(`disabled`)) {
       dateDeadlineElement.removeAttribute(`disabled`);
       dateStatusElement.innerHTML = `yes`;
-      dateInputElement.setAttribute(`value`, new Date(this._dueDate).toDateString());
+      const dueDateValue = this._dueDate || Date.now();
+      dateInputElement.value = new Date(dueDateValue).toDateString();
     } else {
       dateDeadlineElement.setAttribute(`disabled`, `disabled`);
       dateStatusElement.innerHTML = `no`;
-      dateInputElement.setAttribute(`value`, null);
+      dateInputElement.value = null;
     }
   }
 
@@ -261,8 +269,8 @@ export default class TaskCardEdit extends AbstractComponent {
     evt.preventDefault();
     const cardEditElement = this.getElement();
 
-    cardEditElement.classList.remove(`card--${this._currentColor}`);
-    cardEditElement.classList.add(`card--${evt.target.value}`);
+    cardEditElement.classList = ``;
+    cardEditElement.classList.add(`card`, `card--edit`, `card--${evt.target.value}`);
 
     this._newColor = evt.target.value;
   }

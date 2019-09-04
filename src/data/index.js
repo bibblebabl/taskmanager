@@ -43,8 +43,7 @@ const getRandomTask = () => {
       `Сделать домашку`,
       `Пройти интенсив на соточку`
     ]),
-    // dueDate: isRepeating ? null : Date.now() + 1 + getRandomPositiveNegativeNumber(7) * 24 * 60 * 60 * 1000, // в рамках неделю на неделю вперед
-    dueDate: Date.now() + 1 + getRandomPositiveNegativeNumber(7) * 24 * 60 * 60 * 1000, // в рамках неделю на неделю вперед
+    dueDate: isRepeating ? null : Date.now() + 1 + getRandomPositiveNegativeNumber(7) * 24 * 60 * 60 * 1000,
     repeatingDays: {
       Mo: false,
       Tu: false,

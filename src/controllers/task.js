@@ -65,11 +65,13 @@ export default class TaskController {
         evt.preventDefault();
         const formData = new FormData(this._taskEditCard.getElement().querySelector(`.card__form`));
 
+        const dueDate = formData.get(`date`) ? new Date(formData.get(`date`)).getTime() : null;
+
         const entry = {
           description: formData.get(`text`),
           color: formData.get(`color`),
           tags: new Set(formData.getAll(`hashtag`)),
-          dueDate: new Date(formData.get(`date`)).getTime(),
+          dueDate,
           repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
             acc[it] = true;
             return acc;
