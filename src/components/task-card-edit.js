@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 import {ALL_COLORS} from '../data/constants';
 import {REPEATING_DAYS} from '../data';
 import AbstractComponent from './abstract-component';
