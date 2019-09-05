@@ -7,7 +7,7 @@ import TaskCardEdit from '../components/task-card-edit';
 import {REPEATING_DAYS} from '../data';
 
 import {render} from '../utils/render';
-import {isEscButton, getDateMonthFormated} from '../utils';
+import {isEscButton} from '../utils';
 
 export default class TaskController {
   constructor(container, data, onChangeView, onDataChange) {
