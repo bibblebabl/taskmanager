@@ -1,26 +1,35 @@
 import {ALL_COLORS} from '../data/constants';
+import {REPEATING_DAYS} from '../data';
 import AbstractComponent from './abstract-component';
 
-import {objectHasSomeTruthyValue} from '../utils';
+import {isEnterButton, objectHasSomeTruthyValue} from '../utils';
 
 export default class TaskCardEdit extends AbstractComponent {
   constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {
     super();
     this._description = description;
-    this._dueDate = new Date(dueDate);
+    this._dueDate = dueDate;
     this._tags = tags;
     this._color = color;
+    this._currentColor = color;
     this._repeatingDays = repeatingDays;
 
     this._isFavorite = isFavorite;
     this._isArchive = isArchive;
+
+    this._onHashtagInputKeydown = this._onHashtagInputKeydown.bind(this);
+    this._onDeadlineToggleClick = this._onDeadlineToggleClick.bind(this);
+    this._onRepeatToggleClick = this._onRepeatToggleClick.bind(this);
+    this._onColorInputChange = this._onColorInputChange.bind(this);
+
+    this._subscribeOnEvents();
   }
 
-  getRepeatingDays() {
-    return Object.entries(this._repeatingDays).map(([day, value]) => this.getRepeatingDaysCheckbox(day, value)).join(``);
+  _getRepeatingDays(days) {
+    return Object.entries(days).map(([day, value]) => this._getRepeatingDaysCheckbox(day, value)).join(``);
   }
 
-  getRepeatingDaysCheckbox(day, checked, order = 1) {
+  _getRepeatingDaysCheckbox(day, checked, order = 1) {
     const dayLowerCased = day.toLowerCase();
     return `
       <input
@@ -37,7 +46,7 @@ export default class TaskCardEdit extends AbstractComponent {
     `.trim();
   }
 
-  getColorRadioInput(color, checked, order = 1) {
+  _getColorRadioInput(color, checked, order = 1) {
     return `
       <input
         type="radio"
@@ -55,13 +64,13 @@ export default class TaskCardEdit extends AbstractComponent {
     `.trim();
   }
 
-  getCardHashtag(tag) {
+  _getCardHashtag(tag) {
     return `
       <span class="card__hashtag-inner">
         <input
           type="hidden"
           name="hashtag"
-          value="repeat"
+          value="${tag}"
           class="card__hashtag-hidden-input"
         />
         <p class="card__hashtag-name">
@@ -70,36 +79,35 @@ export default class TaskCardEdit extends AbstractComponent {
         <button type="button" class="card__hashtag-delete">
           delete
         </button>
-      </span>
-    `.trim();
+      </span>`
+      .trim();
   }
-
 
   getTemplate() {
     const isRepeating = objectHasSomeTruthyValue(this._repeatingDays);
-    const dueDateFormated = this._dueDate.toDateString();
+    const dueDateValue = this._dueDate ? new Date(this._dueDate).toDateString() : null;
 
     return `
-      <article class="card card--edit card--${this._color}">
-        <form class="card__form" method="get">
-          <div class="card__inner">
-            <div class="card__control">
-              <button type="button" class="card__btn card__btn--archive ${this._isArchive ? `card__btn--disabled` : ``}">
-                archive
-              </button>
-              <button
-                type="button"
-                class="card__btn card__btn--favorites ${this._isFavorite ? `card__btn--disabled` : ``}"
-              >
-                favorites
-              </button>
-            </div>
+      <article class="card card--edit card--${this._color} ${isRepeating ? `card--repeat` : ``}">
+      <form class="card__form" method="get">
+        <div class="card__inner">
+          <div class="card__control">
+            <button type="button" class="card__btn card__btn--archive ${this._isArchive ? `card__btn--disabled` : ``}">
+              archive
+            </button>
+            <button
+              type="button"
+              class="card__btn card__btn--favorites ${this._isFavorite ? `card__btn--disabled` : ``}"
+            >
+              favorites
+            </button>
+          </div>
 
-            <div class="card__color-bar">
-              <svg width="100%" height="10">
-                <use xlink:href="#wave"></use>
-              </svg>
-            </div>
+          <div class="card__color-bar">
+            <svg class="card__color-bar-wave" width="100%" height="10">
+              <use xlink:href="#wave"></use>
+            </svg>
+          </div>
 
             <div class="card__textarea-wrap">
               <label>
@@ -118,15 +126,14 @@ export default class TaskCardEdit extends AbstractComponent {
                   date: <span class="card__date-status">${this._dueDate ? `yes` : `no`}</span>
                   </button>
 
-                  <fieldset class="card__date-deadline" ${isRepeating ? `disabled` : `` }>
+                  <fieldset class="card__date-deadline" ${this._dueDate ? `` : `disabled`}>
                     <label class="card__input-deadline-wrap">
                       <input
                         class="card__date"
                         type="text"
-                        value="${dueDateFormated}"
+                        value="${dueDateValue}"
                         placeholder="23 September"
                         name="date"
-                        disabled=${isRepeating}
                       />
                     </label>
                   </fieldset>
@@ -135,16 +142,16 @@ export default class TaskCardEdit extends AbstractComponent {
                     repeat:<span class="card__repeat-status">${isRepeating ? `yes` : `no`}</span>
                   </button>
 
-                  <fieldset class="card__repeat-days">
+                  <fieldset class="card__repeat-days" ${isRepeating ? `` : `disabled`}>
                     <div class="card__repeat-days-inner">
-                    ${this.getRepeatingDays()}
+                    ${this._getRepeatingDays(this._repeatingDays)}
                   </fieldset>
                 </div>
 
                 <div class="card__hashtag">
                   <div class="card__hashtag-list">
 
-                  ${Array.from(this._tags).map((el) => this.getCardHashtag(el)).join(``)}
+                  ${Array.from(this._tags).map((el) => this._getCardHashtag(el)).join(``)}
                   </div>
 
                   <label>
@@ -161,7 +168,7 @@ export default class TaskCardEdit extends AbstractComponent {
               <div class="card__colors-inner">
                 <h3 class="card__colors-title">Color</h3>
                 <div class="card__colors-wrap">
-                ${ALL_COLORS.map((colorElement) => this.getColorRadioInput(colorElement, colorElement === this._color)).join(``)}
+                ${ALL_COLORS.map((colorElement) => this._getColorRadioInput(colorElement, colorElement === this._color)).join(``)}
                 </div>
               </div>
             </div>
@@ -174,6 +181,97 @@ export default class TaskCardEdit extends AbstractComponent {
         </form>
       </article>
     `.trim();
+  }
 
+  _subscribeOnEvents() {
+    this.getElement()
+      .querySelector(`.card__hashtag-input`)
+      .addEventListener(`keydown`, this._onHashtagInputKeydown);
+
+    this.getElement()
+      .querySelector(`.card__hashtag-list`)
+      .addEventListener(`click`, this._onHashtagListClick);
+
+    this.getElement()
+      .querySelector(`.card__date-deadline-toggle`)
+      .addEventListener(`click`, this._onDeadlineToggleClick);
+
+    this.getElement()
+      .querySelector(`.card__repeat-toggle`)
+      .addEventListener(`click`, this._onRepeatToggleClick);
+
+    const colorInputs = this.getElement()
+      .querySelectorAll(`.card__color-input`);
+
+    colorInputs.forEach((input) => input.addEventListener(`change`, this._onColorInputChange));
+  }
+
+  _onHashtagInputKeydown(evt) {
+    if (isEnterButton(evt.key)) {
+      evt.preventDefault();
+      this.getElement()
+        .querySelector(`.card__hashtag-list`)
+        .insertAdjacentHTML(`beforeend`,
+            this._getCardHashtag(evt.target.value));
+      evt.target.value = ``;
+    }
+  }
+
+  _onHashtagListClick(evt) {
+    evt.preventDefault();
+    if (evt.target.className === `card__hashtag-delete`) {
+      evt.target.parentNode.remove();
+    }
+  }
+
+  _onDeadlineToggleClick(evt) {
+    evt.preventDefault();
+
+    const dateDeadlineElement = this.getElement().querySelector(`.card__date-deadline`);
+    const dateStatusElement = this.getElement().querySelector(`.card__date-status`);
+    const dateInputElement = this.getElement().querySelector(`.card__date`);
+
+    if (dateDeadlineElement.hasAttribute(`disabled`)) {
+      dateDeadlineElement.removeAttribute(`disabled`);
+      dateStatusElement.innerHTML = `yes`;
+      const dueDateValue = this._dueDate || Date.now();
+      dateInputElement.value = new Date(dueDateValue).toDateString();
+    } else {
+      dateDeadlineElement.setAttribute(`disabled`, `disabled`);
+      dateStatusElement.innerHTML = `no`;
+      dateInputElement.value = null;
+    }
+  }
+
+  _onRepeatToggleClick(evt) {
+    evt.preventDefault();
+    const cardEdit = this.getElement();
+    const repeatingDaysElement = this.getElement().querySelector(`.card__repeat-days`);
+    const repeatStatusElement = this.getElement().querySelector(`.card__repeat-status`);
+    const repeatDaysInner = this.getElement().querySelector(`.card__repeat-days-inner`);
+
+    if (repeatingDaysElement.hasAttribute(`disabled`)) {
+      repeatingDaysElement.removeAttribute(`disabled`);
+      repeatStatusElement.innerHTML = `yes`;
+      repeatDaysInner.innerHTML = ``;
+      repeatDaysInner.insertAdjacentHTML(`beforeend`, this._getRepeatingDays(this._repeatingDays));
+      cardEdit.classList.add(`card--repeat`);
+    } else {
+      repeatingDaysElement.setAttribute(`disabled`, `disabled`);
+      repeatStatusElement.innerHTML = `no`;
+      repeatDaysInner.innerHTML = ``;
+      repeatDaysInner.insertAdjacentHTML(`beforeend`, this._getCardHashtag(REPEATING_DAYS));
+      cardEdit.classList.remove(`card--repeat`);
+    }
+  }
+
+  _onColorInputChange(evt) {
+    evt.preventDefault();
+    const cardEditElement = this.getElement();
+
+    cardEditElement.classList = ``;
+    cardEditElement.classList.add(`card`, `card--edit`, `card--${evt.target.value}`);
+
+    this._newColor = evt.target.value;
   }
 }

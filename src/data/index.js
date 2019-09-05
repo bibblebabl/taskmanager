@@ -13,6 +13,15 @@ import {
   getFiltersCount
 } from '../utils';
 
+const REPEATING_DAYS = {
+  'mo': false,
+  'tu': false,
+  'we': false,
+  'th': false,
+  'fr': false,
+  'sa': false,
+  'su': false,
+};
 
 export const MAIN_FILTERS = {
   all: 0,
@@ -34,7 +43,7 @@ const getRandomTask = () => {
       `Сделать домашку`,
       `Пройти интенсив на соточку`
     ]),
-    dueDate: isRepeating ? null : Date.now() + 1 + getRandomPositiveNegativeNumber(7) * 24 * 60 * 60 * 1000, // в рамках неделю на неделю вперед
+    dueDate: isRepeating ? null : Date.now() + 1 + getRandomPositiveNegativeNumber(7) * 24 * 60 * 60 * 1000,
     repeatingDays: {
       Mo: false,
       Tu: false,
@@ -72,5 +81,6 @@ const getMainFiltersList = (cardsList) => {
 
 export {
   getTaskMocks,
-  getMainFiltersList
+  getMainFiltersList,
+  REPEATING_DAYS
 };
