@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const objectHasSomeTruthyValue = (object) => Object.values(object).some((key) => key);
 
 export const isEscButton = (key) => key === `Escape` || key === `Esc`;
@@ -29,3 +31,5 @@ export const getFilterCount = (filters, title) => {
 export const checkFiltersEmptyOrArchived = (filters) => {
   return getFilterCount(filters, `all`) === getFilterCount(filters, `archive`);
 };
+
+export const getDateMonthFormated = (timestamp) => moment(timestamp).format(`DD MMMM YYYY`);

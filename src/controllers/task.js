@@ -1,3 +1,6 @@
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+
 import TaskCard from '../components/task-card';
 import TaskCardEdit from '../components/task-card-edit';
 
@@ -21,6 +24,14 @@ export default class TaskController {
   }
 
   create() {
+    flatpickr(this._taskEditCard.getElement().querySelector(`.card__date`), {
+      altInput: true,
+      allowInput: true,
+      altFormat: `F j, Y`,
+      dateFormat: `Y-m-d`,
+      defaultDate: this._data.dueDate || Date.now()
+    });
+
     const onEscKeyDown = (evt) => {
       if (isEscButton(evt.key)) {
         this._container.getElement().replaceChild(this._taskCard.getElement(), this._taskEdit.getElement());

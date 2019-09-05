@@ -2,7 +2,8 @@ import {ALL_COLORS} from '../data/constants';
 import {REPEATING_DAYS} from '../data';
 import AbstractComponent from './abstract-component';
 
-import {isEnterButton, objectHasSomeTruthyValue} from '../utils';
+import {isEnterButton, objectHasSomeTruthyValue, getDateMonthFormated} from '../utils';
+
 
 export default class TaskCardEdit extends AbstractComponent {
   constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {
@@ -85,7 +86,7 @@ export default class TaskCardEdit extends AbstractComponent {
 
   getTemplate() {
     const isRepeating = objectHasSomeTruthyValue(this._repeatingDays);
-    const dueDateValue = this._dueDate ? new Date(this._dueDate).toDateString() : null;
+    const dueDateValue = this._dueDate ? getDateMonthFormated(this._dueDate) : null;
 
     return `
       <article class="card card--edit card--${this._color} ${isRepeating ? `card--repeat` : ``}">

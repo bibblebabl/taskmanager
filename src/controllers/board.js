@@ -91,7 +91,7 @@ export default class BoardController {
     if (this._cardsShown <= this._tasks.length) {
       render(this._boardTasks.getElement(), this._loadMoreButton.getElement());
       this._loadMoreButton.getElement()
-      .addEventListener(`click`, (evt) => this._onLoadMoreButtonClick(evt));
+        .addEventListener(`click`, (evt) => this._onLoadMoreButtonClick(evt));
     }
   }
 
