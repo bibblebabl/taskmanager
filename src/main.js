@@ -7,6 +7,7 @@ import Statistic from './components/statistic';
 import MainFilters from './components/main-filters';
 
 import {render} from './utils/render';
+import {checkFiltersEmptyOrArchived} from './utils';
 import BoardController from './controllers/board';
 
 const mockTasks = getTaskMocks(TASKS_COUNT);
@@ -29,13 +30,12 @@ render(mainContainer, statisticComponent.getElement());
 
 const boardController = new BoardController({
   container: mainContainer,
-  tasks: mockTasks,
   sortingList: BOARD_SORTING,
   tasksCardsPerPage: TASKS_CARDS_PER_PAGE,
-  mainFilters: mainFiltersList
+  filtersEmptyOrArchived: checkFiltersEmptyOrArchived(mainFiltersList)
 });
 
-boardController.init();
+boardController.show(mockTasks);
 
 menuComponent.getElement().addEventListener(`change`, (evt) => {
   evt.preventDefault();
