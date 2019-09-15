@@ -4,7 +4,6 @@ import AbstractComponent from '../abstract-component';
 
 import {isEnterButton, objectHasSomeTruthyValue, getDateMonthFormated} from '../../utils';
 
-
 export default class TaskCardEdit extends AbstractComponent {
   constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {
     super();

@@ -1,6 +1,5 @@
 import AbstractComponent from './abstract-component';
 
-
 export default class LoadMoreButton extends AbstractComponent {
   constructor() {
     super();
