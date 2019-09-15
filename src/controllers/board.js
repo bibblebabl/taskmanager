@@ -5,11 +5,14 @@ import Sort from '../components/board/filter-list';
 import LoadMoreButton from '../components/load-more-button';
 import BoardNoTasks from '../components/board/no-tasks';
 
-import TaskController from '../controllers/task';
+import TaskController, {Mode} from '../controllers/task';
 
 import {checkFiltersEmptyOrArchived} from '../utils';
 import {render, removeComponent} from '../utils/render';
 import {getSortedTasks} from '../utils/sort';
+import {DEFAULT_TASK} from '../data';
+
+const TaskControllerMode = Mode;
 
 export default class BoardController {
   constructor({container, tasks, sortingList, tasksCardsPerPage, mainFilters}) {
@@ -21,6 +24,8 @@ export default class BoardController {
     this._boardTasks = new BoardTasks();
     this._boardNoTasks = new BoardNoTasks();
     this._loadMoreButton = new LoadMoreButton();
+
+    this._creatingTask = null;
 
     this._subscriptions = [];
 
@@ -54,13 +59,22 @@ export default class BoardController {
     this._board.getElement().classList.remove(`visually-hidden`);
   }
 
-  _onChangeView() {
-    this._subscriptions.forEach((it) => it());
+  createTask() {
+    if (this._creatingTask) {
+      return;
+    }
+
+    this._creatingTask = new TaskController({
+      container: this._boardTasks,
+      data: DEFAULT_TASK,
+      mode: TaskControllerMode.ADDING,
+      onChangeView: this._onChangeView,
+      onDataChange: this._onDataChange
+    });
   }
 
-  _onDataChange(newData, oldData) {
-    this._tasks[this._tasks.findIndex((it) => it === oldData)] = newData;
-    this._renderTaskCards();
+  _onChangeView() {
+    this._subscriptions.forEach((it) => it());
   }
 
   _onDataChange(newData, oldData) {
@@ -69,6 +83,9 @@ export default class BoardController {
     if (newData === null) {
       this._tasks = [...this._tasks.slice(0, currentTaskIndex), ...this._tasks.slice(currentTaskIndex + 1)];
       this._cardsShown = Math.min(this._cardsShown, this._tasks.length);
+    } else if (oldData === null) {
+      this._creatingTask = null;
+      this._tasks = [newData, ...this._tasks];
     } else {
       this._tasks[currentTaskIndex] = newData;
     }
@@ -86,7 +103,14 @@ export default class BoardController {
   }
 
   _renderTaskCard(taskMock) {
-    const taskController = new TaskController(this._boardTasks, taskMock, this._onChangeView, this._onDataChange);
+    const taskController = new TaskController({
+      container: this._boardTasks,
+      data: taskMock,
+      mode: TaskControllerMode.DEFAULT,
+      onChangeView: this._onChangeView,
+      onDataChange: this._onDataChange
+    });
+
     this._subscriptions.push(taskController.setDefaultView.bind(taskController));
   }
 

@@ -33,6 +33,15 @@ export const MAIN_FILTERS = {
   archive: 0
 };
 
+const DEFAULT_TASK = {
+  description: ``,
+  dueDate: new Date(),
+  tags: new Set(),
+  color: [],
+  repeatingDays: {},
+  isFavorite: false,
+  isArchive: false,
+};
 
 const getRandomTask = () => {
   const isRepeating = getRandomBoolean();
@@ -82,5 +91,6 @@ const getMainFiltersList = (cardsList) => {
 export {
   getTaskMocks,
   getMainFiltersList,
-  REPEATING_DAYS
+  REPEATING_DAYS,
+  DEFAULT_TASK
 };
