@@ -49,7 +49,7 @@ const onSearchBackButtonClick = () => {
 const searchController = new SearchController({
   container: mainContainer,
   searchComponent,
-  onSearchBackButtonClick,
+  onBackButtonClick: onSearchBackButtonClick,
   onDataChange
 });
 
