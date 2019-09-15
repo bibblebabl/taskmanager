@@ -1,10 +1,6 @@
 import AbstractComponent from '../abstract-component';
 
 export default class BoardNoTasks extends AbstractComponent {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return `
       <p class="board__no-tasks">

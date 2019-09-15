@@ -1,10 +1,6 @@
 import AbstractComponent from './abstract-component';
 
 export default class Statistic extends AbstractComponent {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return `
     <section class="statistic container">
