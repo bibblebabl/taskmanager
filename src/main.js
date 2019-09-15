@@ -70,7 +70,6 @@ menuComponent.getElement().addEventListener(`change`, (evt) => {
       statisticComponent.getElement().classList.remove(`visually-hidden`);
     },
     "control__new-task": () => {
-      debugger;
       boardController.createTask();
       boardController.show(mockTasks);
       menuComponent.getElement().querySelector(`#control__task`).checked = true;

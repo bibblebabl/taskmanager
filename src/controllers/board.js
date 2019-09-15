@@ -85,9 +85,6 @@ export default class BoardController {
   }
 
   _renderTaskCards() {
-    removeComponent(this._boardTasks.getElement());
-    this._boardTasks.removeElement();
-
     render(this._board.getElement(), this._boardTasks.getElement());
 
     this._taskListController.setTasks(this._getTasksToShow());

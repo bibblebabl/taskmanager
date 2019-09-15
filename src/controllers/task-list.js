@@ -61,7 +61,6 @@ export default class TaskListController {
 
   _onDataChange(newData, oldData) {
     const index = this._tasks.findIndex((task) => task === oldData);
-
     if (newData === null) {
       this._tasks = [...this._tasks.slice(0, index), ...this._tasks.slice(index + 1)];
     } else if (oldData === null) {
