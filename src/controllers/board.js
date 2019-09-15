@@ -1,8 +1,9 @@
-import Board from '../components/board';
-import BoardTasks from '../components/board-tasks';
-import Sort from '../components/board-filter-list';
+import BoardContainer from '../components/board/board-container';
+import BoardTasks from '../components/board/board-tasks';
+import Sort from '../components/board/filter-list';
+
 import LoadMoreButton from '../components/load-more-button';
-import BoardNoTasks from '../components/board-no-tasks';
+import BoardNoTasks from '../components/board/no-tasks';
 
 import TaskController from '../controllers/task';
 
@@ -14,7 +15,7 @@ export default class BoardController {
   constructor({container, tasks, sortingList, tasksCardsPerPage, mainFilters}) {
     this._container = container;
     this._tasks = tasks;
-    this._board = new Board();
+    this._board = new BoardContainer();
     this._sorting = new Sort(sortingList);
     this._mainFilters = mainFilters;
     this._boardTasks = new BoardTasks();

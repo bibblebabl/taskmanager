@@ -1,8 +1,8 @@
-import {ALL_COLORS} from '../data/constants';
-import {REPEATING_DAYS} from '../data';
-import AbstractComponent from './abstract-component';
+import {ALL_COLORS} from '../../data/constants';
+import {REPEATING_DAYS} from '../../data';
+import AbstractComponent from '../abstract-component';
 
-import {isEnterButton, objectHasSomeTruthyValue, getDateMonthFormated} from '../utils';
+import {isEnterButton, objectHasSomeTruthyValue, getDateMonthFormated} from '../../utils';
 
 
 export default class TaskCardEdit extends AbstractComponent {

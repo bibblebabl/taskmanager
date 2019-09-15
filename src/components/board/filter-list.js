@@ -1,4 +1,4 @@
-import AbstractComponent from './abstract-component';
+import AbstractComponent from '../abstract-component';
 
 export default class BoardFilterList extends AbstractComponent {
   constructor(filters) {

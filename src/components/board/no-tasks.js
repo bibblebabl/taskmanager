@@ -1,5 +1,4 @@
-import AbstractComponent from './abstract-component';
-
+import AbstractComponent from '../abstract-component';
 
 export default class BoardNoTasks extends AbstractComponent {
   constructor() {

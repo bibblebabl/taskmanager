@@ -1,8 +1,8 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-import TaskCard from '../components/task-card';
-import TaskCardEdit from '../components/task-card-edit';
+import TaskCard from '../components/task/card';
+import TaskCardEdit from '../components/task/card-edit';
 
 import {REPEATING_DAYS} from '../data';
 
