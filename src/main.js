@@ -9,6 +9,7 @@ import MainFilters from './components/main-filters';
 import {render} from './utils/render';
 import {checkFiltersEmptyOrArchived} from './utils';
 import BoardController from './controllers/board';
+import SearchController from './controllers/search';
 
 const mockTasks = getTaskMocks(TASKS_COUNT);
 const mainFiltersList = getMainFiltersList(mockTasks);
@@ -17,6 +18,11 @@ const menuComponent = new Menu();
 const searchComponent = new Search();
 const mainFiltersComponent = new MainFilters(mainFiltersList);
 const statisticComponent = new Statistic();
+
+const onDataChange = (tasks) => {
+  mockTasks = tasks;
+};
+
 statisticComponent.getElement().classList.add(`visually-hidden`);
 
 const mainContainer = document.querySelector(`.main`);
@@ -30,9 +36,21 @@ render(mainContainer, statisticComponent.getElement());
 
 const boardController = new BoardController({
   container: mainContainer,
-  sortingList: BOARD_SORTING,
-  tasksCardsPerPage: TASKS_CARDS_PER_PAGE,
-  filtersEmptyOrArchived: checkFiltersEmptyOrArchived(mainFiltersList)
+  filtersEmptyOrArchived: checkFiltersEmptyOrArchived(mainFiltersList),
+  onDataChangeMain: onDataChange
+});
+
+const onSearchBackButtonClick = () => {
+  statisticComponent.getElement().classList.add(`visually-hidden`);
+  searchController.hide();
+  boardController.show(mockTasks);
+};
+
+const searchController = new SearchController({
+  container: mainContainer,
+  searchComponent,
+  onSearchBackButtonClick,
+  onDataChange
 });
 
 boardController.show(mockTasks);
@@ -62,4 +80,10 @@ menuComponent.getElement().addEventListener(`change`, (evt) => {
       menuComponent.getElement().querySelector(`#${tasksId}`).checked = true;
       break;
   }
+});
+
+searchComponent.getElement().addEventListener(`click`, () => {
+  statisticComponent.getElement().classList.add(`visually-hidden`);
+  boardController.hide();
+  searchController.show(mockTasks);
 });

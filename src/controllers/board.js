@@ -8,7 +8,7 @@ import BoardNoTasks from '../components/board/no-tasks';
 import TaskController, {Mode} from '../controllers/task';
 import TaskListController from '../controllers/task-list';
 
-import {TASKS_CARDS_PER_PAGE} from '../data/constants';
+import {TASKS_CARDS_PER_PAGE, BOARD_SORTING} from '../data/constants';
 
 import {render, removeComponent} from '../utils/render';
 import {getSortedTasks} from '../utils/sort';
@@ -16,11 +16,11 @@ import {getSortedTasks} from '../utils/sort';
 const TaskControllerMode = Mode;
 
 export default class BoardController {
-  constructor({container, sortingList, filtersEmptyOrArchived}) {
+  constructor({container, filtersEmptyOrArchived}) {
     this._container = container;
     this._tasks = [];
     this._board = new BoardContainer();
-    this._sorting = new Sort(sortingList);
+    this._sorting = new Sort(BOARD_SORTING);
     this._filtersEmptyOrArchived = filtersEmptyOrArchived;
     this._boardTasks = new BoardTasks();
     this._boardNoTasks = new BoardNoTasks();
@@ -31,8 +31,8 @@ export default class BoardController {
     this._cardsShown = 0;
 
     this._taskListController = new TaskListController({
-      container: this._boardTasks,
-      onDataChangeBoard: this._onDataChange.bind(this)
+      container: this._boardTasks.getElement(),
+      onDataChangeMain: this._onDataChange.bind(this)
     });
 
     this._init();

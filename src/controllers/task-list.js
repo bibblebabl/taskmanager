@@ -2,9 +2,9 @@ import TaskController, {Mode as TaskControllerMode} from './task';
 import {DEFAULT_TASK} from '../data';
 
 export default class TaskListController {
-  constructor({container, onDataChangeBoard}) {
+  constructor({container, onDataChangeMain}) {
     this._container = container;
-    this._onDataChangeBoard = onDataChangeBoard;
+    this._onDataChangeMain = onDataChangeMain;
 
     this._creatingTask = null;
     this._subscriptions = [];
@@ -71,6 +71,6 @@ export default class TaskListController {
     }
 
     this.setTasks(this._tasks);
-    this._onDataChangeBoard(this._tasks);
+    this._onDataChangeMain(this._tasks);
   }
 }

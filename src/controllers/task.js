@@ -48,11 +48,11 @@ export default class TaskController {
     const onEscKeyDown = (evt) => {
       if (isEscButton(evt.key)) {
         if (mode === Mode.DEFAULT) {
-          if (this._container.getElement().contains(this._taskEditCard.getElement())) {
-            this._container.getElement().replaceChild(this._taskCard.getElement(), this._taskEditCard.getElement());
+          if (this._container.contains(this._taskEditCard.getElement())) {
+            this._container.replaceChild(this._taskCard.getElement(), this._taskEditCard.getElement());
           }
         } else if (mode === Mode.ADDING) {
-          this._container.getElement().removeChild(currentTaskView.getElement());
+          this._container.removeChild(currentTaskView.getElement());
         }
 
         document.removeEventListener(`keydown`, onEscKeyDown);
@@ -77,7 +77,7 @@ export default class TaskController {
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
         this._onChangeView();
-        this._container.getElement().replaceChild(this._taskEditCard.getElement(), this._taskCard.getElement());
+        this._container.replaceChild(this._taskEditCard.getElement(), this._taskCard.getElement());
 
         document.addEventListener(`keydown`, onEscKeyDown);
       });
@@ -87,7 +87,7 @@ export default class TaskController {
       .querySelector(`.card__form`)
       .addEventListener(`submit`, (evt) => {
         evt.preventDefault();
-        this._container.getElement().replaceChild(this._taskCard.getElement(), this._taskEditCard.getElement());
+        this._container.replaceChild(this._taskCard.getElement(), this._taskEditCard.getElement());
       });
 
     this._taskEditCard.getElement()
@@ -120,12 +120,12 @@ export default class TaskController {
         this._onDataChange(null, this._data);
       });
 
-    render(this._container.getElement(), currentTaskView.getElement(), renderPosition);
+    render(this._container, currentTaskView.getElement(), renderPosition);
   }
 
   setDefaultView() {
-    if (this._container.getElement().contains(this._taskEditCard.getElement())) {
-      this._container.getElement().replaceChild(this._taskCard.getElement(), this._taskEditCard.getElement());
+    if (this._container.contains(this._taskEditCard.getElement())) {
+      this._container.replaceChild(this._taskCard.getElement(), this._taskEditCard.getElement());
     }
   }
 }
