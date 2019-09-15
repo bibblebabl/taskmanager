@@ -94,6 +94,12 @@ export default class TaskController {
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
+    this._taskEditCard.getElement()
+      .querySelector(`.card__delete`)
+      .addEventListener(`click`, () => {
+        this._onDataChange(null, this._data);
+      });
+
     render(this._container.getElement(), this._taskCard.getElement());
   }
 

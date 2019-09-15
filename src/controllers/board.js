@@ -63,12 +63,26 @@ export default class BoardController {
     this._renderTaskCards();
   }
 
+  _onDataChange(newData, oldData) {
+    const currentTaskIndex = this._tasks.findIndex((task) => task === oldData);
+
+    if (newData === null) {
+      this._tasks = [...this._tasks.slice(0, currentTaskIndex), ...this._tasks.slice(currentTaskIndex + 1)];
+      this._cardsShown = Math.min(this._cardsShown, this._tasks.length);
+    } else {
+      this._tasks[currentTaskIndex] = newData;
+    }
+
+    this._renderTaskCards();
+  }
+
   _renderTaskCards() {
     removeComponent(this._boardTasks.getElement());
     this._boardTasks.removeElement();
 
     render(this._board.getElement(), this._boardTasks.getElement());
     this._getTasksToShow().forEach((taskMock) => this._renderTaskCard(taskMock));
+    this._renderLoadMoreButton();
   }
 
   _renderTaskCard(taskMock) {
@@ -77,7 +91,7 @@ export default class BoardController {
   }
 
   _getTasksToShow() {
-    return this._tasks.slice(0, this._cardsShown);
+    return [...this._tasks.slice(0, this._cardsShown)];
   }
 
   _onSortLinkClick(evt) {
