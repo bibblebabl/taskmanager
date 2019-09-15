@@ -5,7 +5,7 @@ import Sort from '../components/board/filter-list';
 import LoadMoreButton from '../components/load-more-button';
 import BoardNoTasks from '../components/board/no-tasks';
 
-import TaskController, {Mode} from '../controllers/task';
+import TaskController, {Mode as TaskControllerMode} from '../controllers/task';
 import TaskListController from '../controllers/task-list';
 
 import {TASKS_CARDS_PER_PAGE, BOARD_SORTING} from '../data/constants';
@@ -13,10 +13,8 @@ import {TASKS_CARDS_PER_PAGE, BOARD_SORTING} from '../data/constants';
 import {render, removeComponent} from '../utils/render';
 import {getSortedTasks} from '../utils/sort';
 
-const TaskControllerMode = Mode;
-
 export default class BoardController {
-  constructor({container, filtersEmptyOrArchived}) {
+  constructor(container, filtersEmptyOrArchived, onDataChange) {
     this._container = container;
     this._tasks = [];
     this._board = new BoardContainer();
@@ -27,6 +25,8 @@ export default class BoardController {
     this._loadMoreButton = new LoadMoreButton();
 
     this._subscriptions = [];
+
+    this._onDataChangeMain = onDataChange;
 
     this._cardsShown = 0;
 
@@ -42,7 +42,7 @@ export default class BoardController {
     render(this._container, this._board.getElement());
     render(this._board.getElement(), this._sorting.getElement());
 
-    this._sorting.getElement().addEventListener(`click`, (evt) => this._onSortLinkClick(evt));
+    this._sorting.getElement().addEventListener(`click`, this._onSortLinkClick);
   }
 
   hide() {
@@ -57,6 +57,10 @@ export default class BoardController {
     this._board.getElement().classList.remove(`visually-hidden`);
   }
 
+  createTask() {
+    this._taskListController.createTask();
+  }
+
   _setTasks(tasks) {
     this._tasks = tasks;
     this._cardsShown = TASKS_CARDS_PER_PAGE;
@@ -65,7 +69,7 @@ export default class BoardController {
   }
 
   _renderTaskList() {
-    if (this._tasks.length === 0 || this.filtersEmptyOrArchived) {
+    if (!this._tasks.length || this.filtersEmptyOrArchived) {
       render(this._board.getElement(), this._boardNoTasks.getElement());
     } else {
       render(this._board.getElement(), this._boardTasks.getElement());
@@ -76,6 +80,7 @@ export default class BoardController {
 
   _onDataChange(tasks) {
     this._tasks = [...tasks];
+    this._onDataChangeMain(this._tasks);
     this._renderTaskCards();
   }
 
@@ -119,7 +124,8 @@ export default class BoardController {
   }
 
   _onLoadMoreButtonClick() {
-    this._taskListController.addTasks(this._tasks.slice(this._cardsShown, this._cardsShown + TASKS_CARDS_PER_PAGE));
+    const tasksToAdd = this._tasks.slice(this._cardsShown, this._cardsShown + TASKS_CARDS_PER_PAGE);
+    this._taskListController.addTasks(tasksToAdd);
     this._cardsShown += TASKS_CARDS_PER_PAGE;
     this._renderLoadMoreButton();
   }

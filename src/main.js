@@ -11,7 +11,7 @@ import {checkFiltersEmptyOrArchived} from './utils';
 import BoardController from './controllers/board';
 import SearchController from './controllers/search';
 
-const mockTasks = getTaskMocks(TASKS_COUNT);
+let mockTasks = getTaskMocks(TASKS_COUNT);
 const mainFiltersList = getMainFiltersList(mockTasks);
 
 const menuComponent = new Menu();
@@ -34,11 +34,7 @@ render(mainContainer, mainFiltersComponent.getElement());
 
 render(mainContainer, statisticComponent.getElement());
 
-const boardController = new BoardController({
-  container: mainContainer,
-  filtersEmptyOrArchived: checkFiltersEmptyOrArchived(mainFiltersList),
-  onDataChangeMain: onDataChange
-});
+const boardController = new BoardController(mainContainer, checkFiltersEmptyOrArchived(mainFiltersList), onDataChange);
 
 const onSearchBackButtonClick = () => {
   statisticComponent.getElement().classList.add(`visually-hidden`);
@@ -62,25 +58,28 @@ menuComponent.getElement().addEventListener(`change`, (evt) => {
     return;
   }
 
-  const tasksId = `control__task`;
-  const statisticId = `control__statistic`;
-  const newTaskId = `control__new-task`;
-
-  switch (evt.target.id) {
-    case tasksId:
+  const menuItems = {
+    "control__task": () => {
       statisticComponent.getElement().classList.add(`visually-hidden`);
-      boardController.show();
-      break;
-    case statisticId:
+      searchController.hide();
+      boardController.show(mockTasks);
+    },
+    "control__statistic": () => {
       boardController.hide();
+      searchController.hide();
       statisticComponent.getElement().classList.remove(`visually-hidden`);
-      break;
-    case newTaskId:
+    },
+    "control__new-task": () => {
+      debugger;
       boardController.createTask();
-      menuComponent.getElement().querySelector(`#${tasksId}`).checked = true;
-      break;
-  }
+      boardController.show(mockTasks);
+      menuComponent.getElement().querySelector(`#control__task`).checked = true;
+    }
+  };
+
+  menuItems[evt.target.id]();
 });
+
 
 searchComponent.getElement().addEventListener(`click`, () => {
   statisticComponent.getElement().classList.add(`visually-hidden`);
