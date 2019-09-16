@@ -19,11 +19,11 @@ export default class TaskListController {
     this._subscriptions = [];
 
     this._container.innerHTML = ``;
-    this._tasks.forEach((task) => this._renderTaskCard(task));
+    this._tasks.forEach((task) => this._renderTask(task));
   }
 
   addTasks(tasks) {
-    tasks.forEach((task) => this._renderTaskCard(task));
+    tasks.forEach((task) => this._renderTask(task));
     this._tasks = this._tasks.concat(tasks);
   }
 
@@ -43,7 +43,7 @@ export default class TaskListController {
       }});
   }
 
-  _renderTaskCard(task) {
+  _renderTask(task) {
     const taskController = new TaskController({
       container: this._container,
       data: task,

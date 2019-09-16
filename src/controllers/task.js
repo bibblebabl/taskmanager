@@ -19,8 +19,8 @@ export default class TaskController {
     this._container = container;
     this._data = data;
 
-    this._taskCard = new TaskCard(data);
-    this._taskEditCard = new TaskCardEdit(data);
+    this._taskCard = new TaskCard(this._data);
+    this._taskEditCard = new TaskCardEdit(this._data);
 
     this._onChangeView = onChangeView;
     this._onDataChange = onDataChange;

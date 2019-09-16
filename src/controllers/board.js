@@ -5,12 +5,11 @@ import Sort from '../components/board/filter-list';
 import LoadMoreButton from '../components/load-more-button';
 import BoardNoTasks from '../components/board/no-tasks';
 
-import TaskController, {Mode as TaskControllerMode} from '../controllers/task';
 import TaskListController from '../controllers/task-list';
 
 import {TASKS_CARDS_PER_PAGE, BOARD_SORTING} from '../data/constants';
 
-import {render, removeComponent} from '../utils/render';
+import {RenderPosition, render, removeComponent} from '../utils/render';
 import {getSortedTasks} from '../utils/sort';
 
 export default class BoardController {
@@ -35,14 +34,9 @@ export default class BoardController {
       onDataChangeMain: this._onDataChange.bind(this)
     });
 
+    this._onSortLinkClick = this._onSortLinkClick.bind(this);
+
     this._init();
-  }
-
-  _init() {
-    render(this._container, this._board.getElement());
-    render(this._board.getElement(), this._sorting.getElement());
-
-    this._sorting.getElement().addEventListener(`click`, this._onSortLinkClick);
   }
 
   hide() {
@@ -61,50 +55,46 @@ export default class BoardController {
     this._taskListController.createTask();
   }
 
-  _setTasks(tasks) {
-    this._tasks = tasks;
-    this._cardsShown = TASKS_CARDS_PER_PAGE;
+  _init() {
+    render(this._container, this._board.getElement());
+    render(this._board.getElement(), this._sorting.getElement(), RenderPosition.AFTERBEGIN);
+    render(this._board.getElement(), this._boardTasks.getElement());
 
-    this._renderTaskList();
+    this._sorting.getElement().addEventListener(`click`, this._onSortLinkClick);
   }
 
-  _renderTaskList() {
+  _renderBoardTasks() {
     if (!this._tasks.length || this.filtersEmptyOrArchived) {
       render(this._board.getElement(), this._boardNoTasks.getElement());
     } else {
       render(this._board.getElement(), this._boardTasks.getElement());
-      this._taskListController.setTasks(this._tasks.slice(0, this._cardsShown));
+      this._taskListController.setTasks(this._getTasksToShow());
       this._renderLoadMoreButton();
     }
   }
 
+  _setTasks(tasks) {
+    this._tasks = tasks;
+    this._cardsShown = TASKS_CARDS_PER_PAGE;
+
+    this._renderBoardTasks();
+  }
+
   _onDataChange(tasks) {
-    this._tasks = [...tasks];
+    this._tasks = tasks;
     this._onDataChangeMain(this._tasks);
-    this._renderTaskCards();
-  }
-
-  _renderTaskCards() {
-    render(this._board.getElement(), this._boardTasks.getElement());
-
-    this._taskListController.setTasks(this._getTasksToShow());
-    this._renderLoadMoreButton();
-  }
-
-  _renderTaskCard(taskMock) {
-    const taskController = new TaskController({
-      container: this._boardTasks,
-      data: taskMock,
-      mode: TaskControllerMode.DEFAULT,
-      onChangeView: this._onChangeView,
-      onDataChange: this._onDataChange
-    });
-
-    this._subscriptions.push(taskController.setDefaultView.bind(taskController));
+    this._renderBoardTasks();
   }
 
   _getTasksToShow() {
     return [...this._tasks.slice(0, this._cardsShown)];
+  }
+
+  _onLoadMoreButtonClick() {
+    const tasksToAdd = this._tasks.slice(this._cardsShown, this._cardsShown + TASKS_CARDS_PER_PAGE);
+    this._taskListController.addTasks(tasksToAdd);
+    this._cardsShown += TASKS_CARDS_PER_PAGE;
+    this._renderLoadMoreButton();
   }
 
   _onSortLinkClick(evt) {
@@ -114,16 +104,8 @@ export default class BoardController {
       return;
     }
 
-    this._boardTasks.getElement().innerHTML = ``;
     const sortedTasks = getSortedTasks(this._getTasksToShow(), evt.target.dataset.sortType);
-    sortedTasks.forEach((taskMock) => this._renderTaskCard(taskMock));
-    this._renderLoadMoreButton();
-  }
-
-  _onLoadMoreButtonClick() {
-    const tasksToAdd = this._tasks.slice(this._cardsShown, this._cardsShown + TASKS_CARDS_PER_PAGE);
-    this._taskListController.addTasks(tasksToAdd);
-    this._cardsShown += TASKS_CARDS_PER_PAGE;
+    this._taskListController.setTasks(sortedTasks);
     this._renderLoadMoreButton();
   }
 
@@ -137,4 +119,6 @@ export default class BoardController {
         .addEventListener(`click`, (evt) => this._onLoadMoreButtonClick(evt));
     }
   }
+
 }
+
