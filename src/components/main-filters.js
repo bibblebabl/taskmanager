@@ -1,6 +1,5 @@
 import AbstractComponent from './abstract-component';
 
-
 export default class MainFilters extends AbstractComponent {
   constructor(filters) {
     super();

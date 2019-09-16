@@ -1,29 +1,42 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-import TaskCard from '../components/task-card';
-import TaskCardEdit from '../components/task-card-edit';
+import TaskCard from '../components/task/card';
+import TaskCardEdit from '../components/task/card-edit';
 
 import {REPEATING_DAYS} from '../data';
 
-import {render} from '../utils/render';
+import {RenderPosition, render} from '../utils/render';
 import {isEscButton} from '../utils';
 
+export const Mode = {
+  ADDING: `adding`,
+  DEFAULT: `default`,
+};
+
 export default class TaskController {
-  constructor(container, data, onChangeView, onDataChange) {
+  constructor({container, data, mode, onChangeView, onDataChange}) {
     this._container = container;
     this._data = data;
 
-    this._taskCard = new TaskCard(data);
-    this._taskEditCard = new TaskCardEdit(data);
+    this._taskCard = new TaskCard(this._data);
+    this._taskEditCard = new TaskCardEdit(this._data);
 
     this._onChangeView = onChangeView;
     this._onDataChange = onDataChange;
 
-    this.create();
+    this.create(mode);
   }
 
-  create() {
+  create(mode) {
+    let renderPosition = RenderPosition.BEFOREEND;
+    let currentTaskView = this._taskCard;
+
+    if (mode === Mode.ADDING) {
+      renderPosition = RenderPosition.AFTERBEGIN;
+      currentTaskView = this._taskEditCard;
+    }
+
     flatpickr(this._taskEditCard.getElement().querySelector(`.card__date`), {
       altInput: true,
       allowInput: true,
@@ -34,7 +47,14 @@ export default class TaskController {
 
     const onEscKeyDown = (evt) => {
       if (isEscButton(evt.key)) {
-        this._container.getElement().replaceChild(this._taskCard.getElement(), this._taskEdit.getElement());
+        if (mode === Mode.DEFAULT) {
+          if (this._container.contains(this._taskEditCard.getElement())) {
+            this._container.replaceChild(this._taskCard.getElement(), this._taskEditCard.getElement());
+          }
+        } else if (mode === Mode.ADDING) {
+          this._container.removeChild(currentTaskView.getElement());
+        }
+
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
@@ -57,7 +77,7 @@ export default class TaskController {
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
         this._onChangeView();
-        this._container.getElement().replaceChild(this._taskEditCard.getElement(), this._taskCard.getElement());
+        this._container.replaceChild(this._taskEditCard.getElement(), this._taskCard.getElement());
 
         document.addEventListener(`keydown`, onEscKeyDown);
       });
@@ -67,7 +87,7 @@ export default class TaskController {
       .querySelector(`.card__form`)
       .addEventListener(`submit`, (evt) => {
         evt.preventDefault();
-        this._container.getElement().replaceChild(this._taskCard.getElement(), this._taskEditCard.getElement());
+        this._container.replaceChild(this._taskCard.getElement(), this._taskEditCard.getElement());
       });
 
     this._taskEditCard.getElement()
@@ -89,17 +109,23 @@ export default class TaskController {
           }, REPEATING_DAYS)
         };
 
-        this._onDataChange(entry, this._data);
+        this._onDataChange(entry, mode === Mode.DEFAULT ? this._data : null);
 
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
-    render(this._container.getElement(), this._taskCard.getElement());
+    this._taskEditCard.getElement()
+      .querySelector(`.card__delete`)
+      .addEventListener(`click`, () => {
+        this._onDataChange(null, this._data);
+      });
+
+    render(this._container, currentTaskView.getElement(), renderPosition);
   }
 
   setDefaultView() {
-    if (this._container.getElement().contains(this._taskEditCard.getElement())) {
-      this._container.getElement().replaceChild(this._taskCard.getElement(), this._taskEditCard.getElement());
+    if (this._container.contains(this._taskEditCard.getElement())) {
+      this._container.replaceChild(this._taskCard.getElement(), this._taskEditCard.getElement());
     }
   }
 }

@@ -1,4 +1,4 @@
-import AbstractComponent from './abstract-component';
+import AbstractComponent from '../abstract-component';
 
 export default class BoardTasks extends AbstractComponent {
   constructor(filters) {

@@ -1,11 +1,6 @@
 import AbstractComponent from './abstract-component';
 
-
 export default class Menu extends AbstractComponent {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return `
     <section class="control__btn-wrap">
