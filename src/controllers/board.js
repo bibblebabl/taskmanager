@@ -29,10 +29,7 @@ export default class BoardController {
 
     this._cardsShown = 0;
 
-    this._taskListController = new TaskListController({
-      container: this._boardTasks.getElement(),
-      onDataChangeMain: this._onDataChange.bind(this)
-    });
+    this._taskListController = new TaskListController(this._boardTasks.getElement(), this._onDataChange.bind(this));
 
     this._onSortLinkClick = this._onSortLinkClick.bind(this);
 
@@ -68,7 +65,7 @@ export default class BoardController {
       render(this._board.getElement(), this._boardNoTasks.getElement());
     } else {
       render(this._board.getElement(), this._boardTasks.getElement());
-      this._taskListController.setTasks(this._getTasksToShow());
+      this._taskListController.setTasks(this._tasks.slice(0, this._cardsShown));
       this._renderLoadMoreButton();
     }
   }
@@ -81,7 +78,7 @@ export default class BoardController {
   }
 
   _onDataChange(tasks) {
-    this._tasks = tasks;
+    this._tasks = [...tasks, ...this._tasks.slice(this._cardsShown)];
     this._onDataChangeMain(this._tasks);
     this._renderBoardTasks();
   }

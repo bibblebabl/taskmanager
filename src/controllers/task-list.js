@@ -2,7 +2,7 @@ import TaskController, {Mode as TaskControllerMode} from './task';
 import {DEFAULT_TASK} from '../data';
 
 export default class TaskListController {
-  constructor({container, onDataChangeMain}) {
+  constructor(container, onDataChangeMain) {
     this._container = container;
     this._onDataChangeMain = onDataChangeMain;
 
