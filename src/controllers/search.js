@@ -40,7 +40,7 @@ export default class SearchController {
       });
     this._searchComponent.getElement().querySelector(`input`)
       .addEventListener(`keyup`, (evt) => {
-        const {value} = evt.currentTarget;
+        const {value} = evt.target;
         const tasks = this._tasks.filter((task) => task.description.includes(value));
 
         this._showSearchResult(value, tasks);

@@ -1,5 +1,5 @@
 import {getTaskMocks, getMainFiltersList} from './data';
-import {TASKS_COUNT, TASKS_CARDS_PER_PAGE, BOARD_SORTING} from './data/constants';
+import {TASKS_COUNT} from './data/constants';
 
 import Menu from './components/menu';
 import Search from './components/search';
@@ -12,11 +12,11 @@ import BoardController from './controllers/board';
 import SearchController from './controllers/search';
 
 let mockTasks = getTaskMocks(TASKS_COUNT);
-const mainFiltersList = getMainFiltersList(mockTasks);
+const mainFilters = getMainFiltersList(mockTasks);
 
 const menuComponent = new Menu();
 const searchComponent = new Search();
-const mainFiltersComponent = new MainFilters(mainFiltersList);
+const mainFiltersComponent = new MainFilters(mainFilters);
 const statisticComponent = new Statistic();
 
 const onDataChange = (tasks) => {
@@ -34,7 +34,7 @@ render(mainContainer, mainFiltersComponent.getElement());
 
 render(mainContainer, statisticComponent.getElement());
 
-const boardController = new BoardController(mainContainer, checkFiltersEmptyOrArchived(mainFiltersList), onDataChange);
+const boardController = new BoardController(mainContainer, checkFiltersEmptyOrArchived(mainFilters), onDataChange);
 
 const onSearchBackButtonClick = () => {
   statisticComponent.getElement().classList.add(`visually-hidden`);
