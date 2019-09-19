@@ -24,6 +24,21 @@ export const getFiltersCount = (list, mainFilters) => {
   return filters;
 };
 
+export const getStatisticValues = (arr, key) => {
+  return arr.reduce((accumulator, el) => {
+    const foundedDate = accumulator.find((element) => element[key] === el[key]);
+    if (!foundedDate) {
+      accumulator.push({
+        [key]: el[key],
+        count: 1
+      });
+    } else {
+      foundedDate.count++;
+    }
+    return accumulator;
+  }, []);
+};
+
 export const getFilterCount = (filters, title) => {
   return filters.find((filter) => filter.title === title).count;
 };

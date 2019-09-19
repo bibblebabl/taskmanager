@@ -3,6 +3,11 @@ export const RenderPosition = {
   BEFOREEND: `beforeend`
 };
 
+export const classListActions = {
+  'REMOVE': `remove`,
+  'ADD': `add`
+};
+
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
@@ -28,5 +33,13 @@ export const render = (container, element, position) => {
 export const removeComponent = (element) => {
   if (element) {
     element.remove();
+  }
+};
+
+export const toggleVisuallyHidden = (element, action) => {
+  if (action === classListActions.ADD) {
+    element.classList.add(`visually-hidden`);
+  } else {
+    element.classList.remove(`visually-hidden`);
   }
 };

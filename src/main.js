@@ -1,15 +1,20 @@
 import {getTaskMocks, getMainFiltersList} from './data';
 import {TASKS_COUNT} from './data/constants';
 
+// Components
 import Menu from './components/menu';
 import Search from './components/search';
 import Statistic from './components/statistic';
 import MainFilters from './components/main-filters';
 
-import {render} from './utils/render';
-import {checkFiltersEmptyOrArchived} from './utils';
+// Controllers
 import BoardController from './controllers/board';
 import SearchController from './controllers/search';
+import StatisticController from './controllers/statistic';
+
+// Utils
+import {checkFiltersEmptyOrArchived} from './utils';
+import {render} from './utils/render';
 
 let mockTasks = getTaskMocks(TASKS_COUNT);
 const mainFilters = getMainFiltersList(mockTasks);
@@ -23,7 +28,7 @@ const onDataChange = (tasks) => {
   mockTasks = tasks;
 };
 
-statisticComponent.getElement().classList.add(`visually-hidden`);
+// statisticComponent.getElement().classList.add(`visually-hidden`);
 
 const mainContainer = document.querySelector(`.main`);
 const controlContainer = document.querySelector(`.main__control`);
@@ -49,6 +54,13 @@ const searchController = new SearchController({
   onDataChange
 });
 
+const statisticController = new StatisticController({
+  component: statisticComponent,
+  filters: mainFilters
+});
+
+statisticController.hide();
+
 boardController.show(mockTasks);
 
 menuComponent.getElement().addEventListener(`change`, (evt) => {
@@ -60,14 +72,14 @@ menuComponent.getElement().addEventListener(`change`, (evt) => {
 
   const menuItems = {
     "control__task": () => {
-      statisticComponent.getElement().classList.add(`visually-hidden`);
+      statisticController.hide();
       searchController.hide();
       boardController.show(mockTasks);
     },
     "control__statistic": () => {
       boardController.hide();
       searchController.hide();
-      statisticComponent.getElement().classList.remove(`visually-hidden`);
+      statisticController.show(mockTasks);
     },
     "control__new-task": () => {
       boardController.createTask();
