@@ -10,10 +10,11 @@ import TaskListController from '../controllers/task-list';
 import {TASKS_CARDS_PER_PAGE, BOARD_SORTING} from '../data/constants';
 
 import {RenderPosition, render, removeComponent} from '../utils/render';
+import {getFilteredTasks} from '../utils/filter';
 import {getSortedTasks} from '../utils/sort';
 
 export default class BoardController {
-  constructor(container, filtersEmptyOrArchived, onDataChange) {
+  constructor({container, filtersEmptyOrArchived, onDataChange, filtersComponent}) {
     this._container = container;
     this._tasks = [];
     this._board = new BoardContainer();
@@ -22,6 +23,8 @@ export default class BoardController {
     this._boardTasks = new BoardTasks();
     this._boardNoTasks = new BoardNoTasks();
     this._loadMoreButton = new LoadMoreButton();
+
+    this._filtersComponent = filtersComponent;
 
     this._subscriptions = [];
 
@@ -32,6 +35,7 @@ export default class BoardController {
     this._taskListController = new TaskListController(this._boardTasks.getElement(), this._onDataChange.bind(this));
 
     this._onSortLinkClick = this._onSortLinkClick.bind(this);
+    this._onFiltersClick = this._onFiltersClick.bind(this);
 
     this._init();
   }
@@ -58,6 +62,7 @@ export default class BoardController {
     render(this._board.getElement(), this._boardTasks.getElement());
 
     this._sorting.getElement().addEventListener(`click`, this._onSortLinkClick);
+    this._filtersComponent.getElement().addEventListener(`click`, this._onFiltersClick);
   }
 
   _renderBoardTasks() {
@@ -103,6 +108,21 @@ export default class BoardController {
 
     const sortedTasks = getSortedTasks(this._getTasksToShow(), evt.target.dataset.sortType);
     this._taskListController.setTasks(sortedTasks);
+    this._renderLoadMoreButton();
+  }
+
+  _onFiltersClick(evt) {
+    evt.preventDefault();
+
+    if (evt.target.tagName !== `LABEL`) {
+      return;
+    }
+
+    const filterType = evt.target.getAttribute(`for`).replace(`filter__`, ``);
+    const filteredTasks = getFilteredTasks(this._getTasksToShow(), filterType);
+    console.log(filteredTasks.length);
+    console.log(filteredTasks);
+    this._taskListController.setTasks(filteredTasks);
     this._renderLoadMoreButton();
   }
 

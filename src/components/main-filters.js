@@ -16,16 +16,14 @@ export default class MainFilters extends AbstractComponent {
         ${index === 0 ? `checked` : ``}
         ${count === 0 ? `disabled` : ``}
       />
-      <label for="filter__${title}" class="filter__label">
-        ${title} <span class="filter__${title}-count">${count}</span></label
-      >
+      <label for="filter__${title}" class="filter__label">${title}<span class="filter__${title}-count">${count}</span></label>
     `.trim();
   }
 
   getTemplate() {
     return `
     <section class="main__filter filter container">
-      ${this._filters.map((filter, index) => this.getMainFilterElement(filter, index)).join(``)}
+      ${this._filters.map((filter, index) => this.getMainFilterElement(filter, index)).join(``).trim()}
     </section>
     `.trim();
   }

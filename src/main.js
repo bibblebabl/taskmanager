@@ -37,7 +37,12 @@ const statisticController = new StatisticController({
   container: mainContainer
 });
 
-const boardController = new BoardController(mainContainer, checkFiltersEmptyOrArchived(mainFilters), onDataChange);
+const boardController = new BoardController({
+  container: mainContainer,
+  filtersEmptyOrArchived: checkFiltersEmptyOrArchived(mainFilters),
+  onDataChange,
+  filtersComponent: mainFiltersComponent
+});
 
 const onSearchBackButtonClick = () => {
   statisticController.hide();

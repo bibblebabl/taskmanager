@@ -1,17 +1,21 @@
-export const filters = (task) => {
+export const filters = () => {
   const currentDate = new Date();
 
   return {
-    "overdue": () => (task.dueDate < currentDate),
-    "today": () => (new Date(task.dueDate).toDateString() === currentDate.toDateString()),
-    "favorites": () => (task.isFavorite),
-    "archive": () => (task.isArchive),
-    "repeating": () => (Object.values(task.repeatingDays).some((day) => day)),
-    "tags": () => (task.tags.size),
+    "overdue": (task) => (task.dueDate < currentDate),
+    "today": (task) => (new Date(task.dueDate).toDateString() === currentDate.toDateString()),
+    "favorites": (task) => (task.isFavorite),
+    "archive": (task) => (task.isArchive),
+    "repeating": (task) => (Object.values(task.repeatingDays).some((day) => day)),
+    "tags": (task) => (task.tags.size),
   };
 };
 
 export const getFilteredTasks = (tasks, filter) => {
-  const filterTasks = filters(tasks);
-  return filterTasks[filter] ? filterTasks[filter]() : tasks;
+  const selectedFilter = filters()[filter];
+
+  if (selectedFilter) {
+    return tasks.filter((task) => selectedFilter(task));
+  }
+  return tasks;
 };
