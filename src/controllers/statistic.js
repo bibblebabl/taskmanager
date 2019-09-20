@@ -1,12 +1,13 @@
 import Chart from 'chart.js';
 import flatpickr from 'flatpickr';
-import moment from 'moment';
 
 import Statistic from '../components/statistic';
 
-import {toggleVisuallyHidden, classListActions} from '../utils/render';
-import {getStatisticValues, getMappedDueDateStatistic} from '../utils/statistic';
-import {render} from '../utils/render';
+// Utils
+import {render, toggleVisuallyHidden, classListActions} from '../utils/render';
+import {getStatisticValues, getMappedDueDateStatistic, filterTasksByDateRange} from '../utils/statistic';
+import {getDefaultStatisticDateRange, getRangeDateTimeSting} from '../utils/format';
+
 import {getMainFiltersList} from '../data';
 import {chartDatasets, chartOptions} from '../config';
 
@@ -15,33 +16,45 @@ export default class StatisticController {
     this._container = container;
     this._statisticComponent = new Statistic();
 
+    this._defaultRange = getDefaultStatisticDateRange();
+
     this._tasks = [];
     this._init();
+
+    this._onDateRangeChange = this._onDateRangeChange.bind(this);
   }
 
   _init() {
     this.hide();
     render(this._container, this._statisticComponent.getElement());
 
-    const lastWeekDay = moment().subtract(1, `week`).format(`YYYY-MM-DD`);
-    const today = moment().format(`YYYY-MM-DD`);
-
     flatpickr(this._statisticComponent.getElement().querySelector(`.statistic__period-input`), {
       mode: `range`,
       maxDate: `today`,
       dateFormat: `Y-m-d`,
-      defaultDate: [lastWeekDay, today]
+      defaultDate: [getRangeDateTimeSting(this._defaultRange.weekAgo), getRangeDateTimeSting(this._defaultRange.today)],
+      onChange: this._onDateRangeChange.bind(this)
     });
+  }
+
+  _onDateRangeChange(selectedDates) {
+    if (selectedDates.length === 2) {
+      const filteredTasksByDate = filterTasksByDateRange(this._tasks, selectedDates[0].getTime(), selectedDates[1].getTime());
+      this._renderCharts(filteredTasksByDate);
+    }
   }
 
   show(tasks) {
     this._tasks = tasks;
 
+    const {weekAgo, today} = this._defaultRange;
+    const weekTasks = filterTasksByDateRange(this._tasks, weekAgo, today);
+
     if (this._statisticComponent.getElement().classList.contains(`visually-hidden`)) {
       toggleVisuallyHidden(this._statisticComponent.getElement());
     }
 
-    this._renderCharts(this._tasks);
+    this._renderCharts(weekTasks);
   }
 
   hide() {

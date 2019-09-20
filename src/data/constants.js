@@ -2,6 +2,8 @@ export const ALL_COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
 
 export const TASKS_COUNT = 21;
 
+export const WEEK_MS = 604800000;
+
 export const TASKS_CARDS_PER_PAGE = 8;
 
 export const BOARD_SORTING = [

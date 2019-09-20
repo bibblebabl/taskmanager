@@ -47,3 +47,7 @@ export const getFilterCount = (filters, title) => {
 export const checkFiltersEmptyOrArchived = (filters) => {
   return getFilterCount(filters, `all`) === getFilterCount(filters, `archive`);
 };
+
+export const filterTasksByDateRange = (arr, fromDate, toDate) => {
+  return arr.filter((task) => task.dueDate >= fromDate && task.dueDate <= toDate);
+};
