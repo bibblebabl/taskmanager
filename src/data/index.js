@@ -77,8 +77,8 @@ const getRandomTask = () => {
 
 const getTaskMocks = (cardsCount) => [...Array(cardsCount)].map(() => getRandomTask());
 
-const getMainFiltersList = (cardsList) => {
-  const filterCount = getFiltersCount(cardsList, MAIN_FILTERS);
+const getMainFiltersList = (tasks) => {
+  const filterCount = getFiltersCount(tasks, MAIN_FILTERS);
 
   return Object.keys(MAIN_FILTERS).map((filter) => {
     return {

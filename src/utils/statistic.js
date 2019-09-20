@@ -1,9 +1,9 @@
 import {getDateTimeString} from "./format";
 
-export const getFiltersCount = (list, mainFilters) => {
+export const getFiltersCount = (tasks, mainFilters) => {
   const currentDate = new Date();
 
-  const filters = list.reduce((total, card) => {
+  const filters = tasks.reduce((total, card) => {
     total.all += 1;
     total.overdue += +(card.dueDate < currentDate);
     total.today += +(new Date(card.dueDate).toDateString() === currentDate.toDateString());
