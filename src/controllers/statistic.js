@@ -1,80 +1,101 @@
 import Chart from 'chart.js';
+import flatpickr from 'flatpickr';
+import moment from 'moment';
+
+import Statistic from '../components/statistic';
 
 import {toggleVisuallyHidden, classListActions} from '../utils/render';
-import {getStatisticValues} from '../utils';
+import {getStatisticValues, getMappedDueDateStatistic} from '../utils';
+import {render} from '../utils/render';
+import {getMainFiltersList} from '../data';
+import {chartDatasets, chartOptions} from '../config';
 
 export default class StatisticController {
-  constructor({component, filters}) {
-    this._component = component;
-    this._filters = filters;
+  constructor({container}) {
+    this._container = container;
+    this._statisticComponent = new Statistic();
 
     this._tasks = [];
-
     this._init();
   }
 
   _init() {
     this.hide();
-  }
+    render(this._container, this._statisticComponent.getElement());
 
-  hide() {
-    toggleVisuallyHidden(this._component.getElement(), classListActions.ADD);
+    const lastWeekDay = moment().subtract(1, `week`).format(`YYYY-MM-DD`);
+    const today = moment().format(`YYYY-MM-DD`);
+
+    flatpickr(this._statisticComponent.getElement().querySelector(`.statistic__period-input`), {
+      mode: `range`,
+      maxDate: `today`,
+      dateFormat: `Y-m-d`,
+      defaultDate: [lastWeekDay, today]
+    });
   }
 
   show(tasks) {
     this._tasks = tasks;
 
-    if (this._component.getElement().classList.contains(`visually-hidden`)) {
-      toggleVisuallyHidden(this._component.getElement());
+    if (this._statisticComponent.getElement().classList.contains(`visually-hidden`)) {
+      toggleVisuallyHidden(this._statisticComponent.getElement());
     }
 
-    const statisticTagsCanvasElement = this._component.getElement().querySelector(`.statistic__tags`);
-    const statisticColorsCanvasElement = this._component.getElement().querySelector(`.statistic__colors`);
-
-    this._renderTagsChart(statisticTagsCanvasElement, this._tasks);
-    this._renderColorsChart(statisticColorsCanvasElement, this._tasks);
-
+    this._renderCharts(this._tasks);
   }
 
+  hide() {
+    toggleVisuallyHidden(this._statisticComponent.getElement(), classListActions.ADD);
+  }
+
+  _renderCharts(tasks) {
+    const tagsCanvasElement = this._statisticComponent.getElement().querySelector(`.statistic__tags`);
+    const colorsCanvasElement = this._statisticComponent.getElement().querySelector(`.statistic__colors`);
+    const daysCanvasElement = this._statisticComponent.getElement().querySelector(`.statistic__days`);
+
+    this._renderDays(daysCanvasElement, tasks);
+    this._renderTagsChart(tagsCanvasElement, tasks);
+    this._renderColorsChart(colorsCanvasElement, tasks);
+  }
+
+  _renderDays(container, tasks) {
+    const tasksGroupedByDay = getMappedDueDateStatistic(tasks);
+    const labels = tasksGroupedByDay.map((el) => el.dueDate);
+    const data = tasksGroupedByDay.map((el) => el.count);
+
+    const tagsChart = new Chart(container, {
+      type: `line`,
+      data: {
+        labels,
+        datasets: [{
+          data,
+          label: `Done by Days`,
+          backgroundColor: chartDatasets.backgroundColor,
+          borderColor: chartDatasets.borderColor,
+          borderWidth: chartDatasets.borderWidth
+        }]
+      },
+      options: chartOptions
+    });
+  }
   _renderTagsChart(container, tasks) {
-    const labels = this._filters.map((el) => el.title);
-    const data = this._filters.map((el) => el.count);
+    const tasksGroupedByTags = getMainFiltersList(tasks);
+    const labels = tasksGroupedByTags.map((el) => el.title);
+    const data = tasksGroupedByTags.map((el) => el.count);
 
     const tagsChart = new Chart(container, {
       type: `doughnut`,
       data: {
         labels,
         datasets: [{
-          label: `# of Votes`,
+          label: `Done by Tags`,
           data,
-          backgroundColor: [
-            `rgba(255, 99, 132, 0.2)`,
-            `rgba(54, 162, 235, 0.2)`,
-            `rgba(255, 206, 86, 0.2)`,
-            `rgba(75, 192, 192, 0.2)`,
-            `rgba(153, 102, 255, 0.2)`,
-            `rgba(255, 159, 64, 0.2)`
-          ],
-          borderColor: [
-            `rgba(255, 99, 132, 1)`,
-            `rgba(54, 162, 235, 1)`,
-            `rgba(255, 206, 86, 1)`,
-            `rgba(75, 192, 192, 1)`,
-            `rgba(153, 102, 255, 1)`,
-            `rgba(255, 159, 64, 1)`
-          ],
-          borderWidth: 1
+          backgroundColor: chartDatasets.backgroundColor,
+          borderColor: chartDatasets.borderColor,
+          borderWidth: chartDatasets.borderWidth
         }]
       },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
+      options: chartOptions
     });
   }
 
@@ -88,7 +109,7 @@ export default class StatisticController {
       data: {
         labels,
         datasets: [{
-          label: `# of Colors`,
+          label: `Done by Colors`,
           data,
           backgroundColor: labels,
           borderWidth: 1

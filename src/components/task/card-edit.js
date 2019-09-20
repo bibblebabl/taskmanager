@@ -2,7 +2,7 @@ import {ALL_COLORS} from '../../data/constants';
 import {REPEATING_DAYS} from '../../data';
 import AbstractComponent from '../abstract-component';
 
-import {isEnterButton, objectHasSomeTruthyValue, getDateMonthFormated} from '../../utils';
+import {isEnterButton, objectHasSomeTruthyValue, getDateMonthFormated} from '../../utils/format';
 
 export default class TaskCardEdit extends AbstractComponent {
   constructor({description, dueDate, tags, color, repeatingDays, isFavorite, isArchive}) {

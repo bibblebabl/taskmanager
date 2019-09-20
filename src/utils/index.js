@@ -39,6 +39,13 @@ export const getStatisticValues = (arr, key) => {
   }, []);
 };
 
+export const filterArrayFalseValues = (arr) => arr.filter((el) => el.dueDate);
+
+export const getMappedDueDateStatistic = (arr) => {
+  const dueDateDataMapped = filterArrayFalseValues(arr).map((element) => Object.assign({}, element, {dueDate: getDateTimeString(element.dueDate)}));
+  return getStatisticValues(dueDateDataMapped, `dueDate`);
+};
+
 export const getFilterCount = (filters, title) => {
   return filters.find((filter) => filter.title === title).count;
 };
@@ -48,3 +55,5 @@ export const checkFiltersEmptyOrArchived = (filters) => {
 };
 
 export const getDateMonthFormated = (timestamp) => moment(timestamp).format(`DD MMMM YYYY`);
+
+export const getDateTimeString = (timestamp) => moment(timestamp).format(`DD/MM/YYYY`);

@@ -4,7 +4,6 @@ import {TASKS_COUNT} from './data/constants';
 // Components
 import Menu from './components/menu';
 import Search from './components/search';
-import Statistic from './components/statistic';
 import MainFilters from './components/main-filters';
 
 // Controllers
@@ -22,13 +21,10 @@ const mainFilters = getMainFiltersList(mockTasks);
 const menuComponent = new Menu();
 const searchComponent = new Search();
 const mainFiltersComponent = new MainFilters(mainFilters);
-const statisticComponent = new Statistic();
 
 const onDataChange = (tasks) => {
   mockTasks = tasks;
 };
-
-// statisticComponent.getElement().classList.add(`visually-hidden`);
 
 const mainContainer = document.querySelector(`.main`);
 const controlContainer = document.querySelector(`.main__control`);
@@ -37,12 +33,14 @@ render(controlContainer, menuComponent.getElement());
 render(mainContainer, searchComponent.getElement());
 render(mainContainer, mainFiltersComponent.getElement());
 
-render(mainContainer, statisticComponent.getElement());
+const statisticController = new StatisticController({
+  container: mainContainer
+});
 
 const boardController = new BoardController(mainContainer, checkFiltersEmptyOrArchived(mainFilters), onDataChange);
 
 const onSearchBackButtonClick = () => {
-  statisticComponent.getElement().classList.add(`visually-hidden`);
+  statisticController.hide();
   searchController.hide();
   boardController.show(mockTasks);
 };
@@ -52,11 +50,6 @@ const searchController = new SearchController({
   searchComponent,
   onBackButtonClick: onSearchBackButtonClick,
   onDataChange
-});
-
-const statisticController = new StatisticController({
-  component: statisticComponent,
-  filters: mainFilters
 });
 
 statisticController.hide();
@@ -93,7 +86,7 @@ menuComponent.getElement().addEventListener(`change`, (evt) => {
 
 
 searchComponent.getElement().addEventListener(`click`, () => {
-  statisticComponent.getElement().classList.add(`visually-hidden`);
+  statisticController.hide();
   boardController.hide();
   searchController.show(mockTasks);
 });
