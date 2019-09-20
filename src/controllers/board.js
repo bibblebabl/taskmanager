@@ -120,8 +120,6 @@ export default class BoardController {
 
     const filterType = evt.target.getAttribute(`for`).replace(`filter__`, ``);
     const filteredTasks = getFilteredTasks(this._getTasksToShow(), filterType);
-    console.log(filteredTasks.length);
-    console.log(filteredTasks);
     this._taskListController.setTasks(filteredTasks);
     this._renderLoadMoreButton();
   }

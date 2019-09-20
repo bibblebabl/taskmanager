@@ -76,7 +76,7 @@ export default class StatisticController {
     const labels = tasksGroupedByDay.map((el) => el.dueDate);
     const data = tasksGroupedByDay.map((el) => el.count);
 
-    const tagsChart = new Chart(container, {
+    return new Chart(container, {
       type: `line`,
       data: {
         labels,
@@ -96,7 +96,7 @@ export default class StatisticController {
     const labels = tasksGroupedByTags.map((el) => el.title);
     const data = tasksGroupedByTags.map((el) => el.count);
 
-    const tagsChart = new Chart(container, {
+    return new Chart(container, {
       type: `doughnut`,
       data: {
         labels,
@@ -117,7 +117,7 @@ export default class StatisticController {
     const data = colors.map((el) => el.count);
     const labels = colors.map((el) => el.color);
 
-    const colorsChart = new Chart(container, {
+    return new Chart(container, {
       type: `pie`,
       data: {
         labels,
