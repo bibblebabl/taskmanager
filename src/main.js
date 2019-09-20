@@ -12,7 +12,7 @@ import SearchController from './controllers/search';
 import StatisticController from './controllers/statistic';
 
 // Utils
-import {checkFiltersEmptyOrArchived} from './utils';
+import {checkFiltersEmptyOrArchived} from './utils/statistic';
 import {render} from './utils/render';
 
 let mockTasks = getTaskMocks(TASKS_COUNT);

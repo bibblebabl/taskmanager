@@ -1,4 +1,3 @@
-
 import moment from 'moment';
 
 export const getDateMonthFormated = (timestamp) => moment(timestamp).format(`DD MMMM YYYY`);

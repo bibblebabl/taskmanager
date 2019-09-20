@@ -11,7 +11,7 @@ import {
 
 import {
   getFiltersCount
-} from '../utils';
+} from '../utils/statistic';
 
 const REPEATING_DAYS = {
   'mo': false,

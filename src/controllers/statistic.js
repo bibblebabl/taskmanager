@@ -5,7 +5,7 @@ import moment from 'moment';
 import Statistic from '../components/statistic';
 
 import {toggleVisuallyHidden, classListActions} from '../utils/render';
-import {getStatisticValues, getMappedDueDateStatistic} from '../utils';
+import {getStatisticValues, getMappedDueDateStatistic} from '../utils/statistic';
 import {render} from '../utils/render';
 import {getMainFiltersList} from '../data';
 import {chartDatasets, chartOptions} from '../config';
