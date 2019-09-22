@@ -18,27 +18,35 @@ export const getFiltersCount = (tasks, mainFilters) => {
   return filters;
 };
 
-export const getStatisticValues = (arr, key) => {
-  return arr.reduce((accumulator, el) => {
-    const foundedDate = accumulator.find((element) => element[key] === el[key]);
-    if (!foundedDate) {
-      accumulator.push({
-        [key]: el[key],
-        count: 1
-      });
+export const getStatisticCount = (tasks, key) => {
+  const statisticByKeyValuesArray = tasks.reduce((acc, task) => {
+    if (task[key] instanceof Set) {
+      const tasksTags = Array.from(task[key]);
+      if (tasksTags.length) {
+        acc = [...acc, ...tasksTags];
+      }
     } else {
-      foundedDate.count++;
+      acc = [...acc, task[key]];
     }
-    return accumulator;
+    return acc;
   }, []);
+
+  return countDuplicateArrayValues(statisticByKeyValuesArray);
 };
 
-export const filterArrayFalseValues = (arr) => arr.filter((el) => el.dueDate);
+export const countDuplicateArrayValues = (array) => {
+  return array.reduce((acc, key) => {
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
+};
 
 export const getMappedDueDateStatistic = (arr) => {
   const dueDateDataMapped = filterArrayFalseValues(arr).map((element) => Object.assign({}, element, {dueDate: getDateTimeString(element.dueDate)}));
-  return getStatisticValues(dueDateDataMapped, `dueDate`);
+  return getStatisticCount(dueDateDataMapped, `dueDate`);
 };
+
+export const filterArrayFalseValues = (arr) => arr.filter((el) => el.dueDate);
 
 export const getFilterCount = (filters, title) => {
   return filters.find((filter) => filter.title === title).count;

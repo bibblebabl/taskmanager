@@ -16,7 +16,7 @@ export default class MainFilters extends AbstractComponent {
         ${index === 0 ? `checked` : ``}
         ${count === 0 ? `disabled` : ``}
       />
-      <label for="filter__${title}" class="filter__label">${title}<span class="filter__${title}-count">${count}</span></label>
+      <label for="filter__${title}" class="filter__label">${title}<span class="filter__${title}-count">&nbsp;${count}</span></label>
     `.trim();
   }
 

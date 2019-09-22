@@ -5,10 +5,10 @@ import Statistic from '../components/statistic';
 
 // Utils
 import {render, toggleVisuallyHidden, classListActions} from '../utils/render';
-import {getStatisticValues, getMappedDueDateStatistic, filterTasksByDateRange} from '../utils/statistic';
+import {getStatisticValues, getMappedDueDateStatistic, filterTasksByDateRange, getStatisticCount} from '../utils/statistic';
 import {getDefaultStatisticDateRange, getRangeDateTimeSting} from '../utils/format';
 
-import {getMainFiltersList} from '../data';
+// import {getMainFiltersList} from '../data';
 import {chartDatasets, chartOptions} from '../config';
 
 export default class StatisticController {
@@ -30,7 +30,6 @@ export default class StatisticController {
 
     flatpickr(this._statisticComponent.getElement().querySelector(`.statistic__period-input`), {
       mode: `range`,
-      maxDate: `today`,
       dateFormat: `Y-m-d`,
       defaultDate: [getRangeDateTimeSting(this._defaultRange.weekAgo), getRangeDateTimeSting(this._defaultRange.today)],
       onChange: this._onDateRangeChange.bind(this)
@@ -66,15 +65,15 @@ export default class StatisticController {
     const colorsCanvasElement = this._statisticComponent.getElement().querySelector(`.statistic__colors`);
     const daysCanvasElement = this._statisticComponent.getElement().querySelector(`.statistic__days`);
 
-    this._renderDays(daysCanvasElement, tasks);
+    this._renderDaysChart(daysCanvasElement, tasks);
     this._renderTagsChart(tagsCanvasElement, tasks);
     this._renderColorsChart(colorsCanvasElement, tasks);
   }
 
-  _renderDays(container, tasks) {
-    const tasksGroupedByDay = getMappedDueDateStatistic(tasks);
-    const labels = tasksGroupedByDay.map((el) => el.dueDate);
-    const data = tasksGroupedByDay.map((el) => el.count);
+  _renderDaysChart(container, tasks) {
+    const tasksByDay = getMappedDueDateStatistic(tasks);
+    const labels = Object.keys(tasksByDay);
+    const data = Object.values(tasksByDay);
 
     return new Chart(container, {
       type: `line`,
@@ -92,9 +91,9 @@ export default class StatisticController {
     });
   }
   _renderTagsChart(container, tasks) {
-    const tasksGroupedByTags = getMainFiltersList(tasks);
-    const labels = tasksGroupedByTags.map((el) => el.title);
-    const data = tasksGroupedByTags.map((el) => el.count);
+    const tasksbyTags = getStatisticCount(tasks, `tags`);
+    const labels = Object.keys(tasksbyTags);
+    const data = Object.values(tasksbyTags);
 
     return new Chart(container, {
       type: `doughnut`,
@@ -113,9 +112,9 @@ export default class StatisticController {
   }
 
   _renderColorsChart(container, tasks) {
-    const colors = getStatisticValues(tasks, `color`);
-    const data = colors.map((el) => el.count);
-    const labels = colors.map((el) => el.color);
+    const byColor = getStatisticCount(tasks, `color`);
+    const labels = Object.keys(byColor);
+    const data = Object.values(byColor);
 
     return new Chart(container, {
       type: `pie`,
